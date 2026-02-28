@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanUrbi · Painel Executivo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+:root {
+  --verde-escuro:#0F3328; --verde-principal:#1A4D3A; --verde-medio:#2D6B52;
+  --verde-claro:#3D8A6A; --verde-suave:#E8F2EE; --areia:#F5F0E8;
+  --areia-escura:#E8DFCF; --branco:#FAFAF8; --texto:#1C1C1A;
+  --texto-suave:#5A5A52; --texto-fraco:#9A9A8E; --borda:#D8D4C8;
+  --validado:#2D6B52; --situacional:#8B6914;
+  --bg-v:#E8F2EE; --bg-s:#FDF3D8;
+  --sombra:0 2px 20px rgba(15,51,40,0.08);
+  --sombra2:0 6px 32px rgba(15,51,40,0.13);
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto);min-height:100vh;}
+
+/* HEADER */
+.hdr{background:var(--verde-escuro);height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
+.hdr-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;display:flex;align-items:center;gap:12px;}
+.hdr-logo span{font-size:11px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);border-left:1px solid rgba(255,255,255,0.15);padding-left:12px;}
+.btn-back{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:7px 16px;border-radius:7px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.btn-back:hover{background:rgba(255,255,255,0.14);color:#fff;}
+
+/* HERO */
+.hero{background:linear-gradient(135deg,var(--verde-principal) 0%,var(--verde-medio) 100%);padding:40px 40px 36px;overflow:hidden;position:relative;}
+.hero::before{content:'';position:absolute;right:-60px;top:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(255,255,255,0.06) 0%,transparent 70%);border-radius:50%;}
+.hero-in{max-width:1300px;margin:0 auto;position:relative;z-index:1;}
+.hero-tag{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:10px;}
+.hero-h1{font-family:'Syne',sans-serif;font-size:clamp(22px,3vw,38px);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.5px;margin-bottom:10px;}
+.hero-sub{font-size:15px;color:rgba(255,255,255,0.65);font-weight:300;max-width:580px;line-height:1.65;margin-bottom:32px;}
+.kpi-strip{display:flex;gap:0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;max-width:800px;}
+.kpi-item{flex:1;padding:18px 16px;border-right:1px solid rgba(255,255,255,0.1);transition:background .2s;}
+.kpi-item:last-child{border-right:none;}
+.kpi-item:hover{background:rgba(255,255,255,0.06);}
+.kpi-icon{font-size:20px;margin-bottom:8px;}
+.kpi-v{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px;}
+.kpi-l{font-size:11.5px;font-weight:500;color:rgba(255,255,255,0.5);line-height:1.4;}
+
+/* MAIN */
+.main{max-width:1300px;margin:0 auto;padding:36px 40px 60px;display:flex;flex-direction:column;gap:28px;}
+
+/* SECTION TITLE */
+.stitle{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--verde-medio);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.stitle::after{content:'';flex:1;height:1px;background:var(--borda);}
+
+/* CARD */
+.card{background:var(--branco);border:1px solid var(--borda);border-radius:16px;padding:24px;box-shadow:var(--sombra);}
+.ctitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--texto);margin-bottom:4px;}
+.csub{font-size:13px;color:var(--texto-suave);font-weight:300;margin-bottom:20px;line-height:1.55;}
+
+/* GRIDS */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.g4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+
+/* BLOCO CARD */
+.bloco{border-radius:16px;padding:24px;box-shadow:var(--sombra);}
+.bv{background:var(--bg-v);border:1.5px solid #A8D4BE;}
+.bs{background:var(--bg-s);border:1.5px solid #D4B86A;}
+.b-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
+.bv .b-icon{background:rgba(45,107,82,0.15);}
+.bs .b-icon{background:rgba(139,105,20,0.15);}
+.b-num{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;line-height:1;margin-bottom:6px;}
+.bv .b-num{color:var(--validado);}
+.bs .b-num{color:var(--situacional);}
+.b-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.bv .b-title{color:var(--verde-principal);}
+.bs .b-title{color:#6B4E00;}
+.b-desc{font-size:13.5px;line-height:1.65;font-weight:300;}
+.bv .b-desc{color:#3A6050;}
+.bs .b-desc{color:#7A5800;}
+.b-badge{display:inline-flex;align-items:center;gap:5px;font-size:11.5px;font-weight:600;padding:5px 12px;border-radius:20px;margin-top:14px;}
+.bv .b-badge{background:rgba(45,107,82,0.15);color:var(--validado);}
+.bs .b-badge{background:rgba(139,105,20,0.15);color:var(--situacional);}
+
+/* DONUT SECTION */
+.donut-wrap{display:flex;align-items:center;gap:32px;}
+.donut-legend{flex:1;display:flex;flex-direction:column;gap:0;}
+.leg-row{display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid var(--borda);}
+.leg-row:last-child{border-bottom:none;}
+.leg-color{width:14px;height:14px;border-radius:4px;flex-shrink:0;}
+.leg-info{flex:1;}
+.leg-name{font-weight:600;font-size:14px;color:var(--texto);margin-bottom:3px;}
+.leg-exp{font-size:12.5px;color:var(--texto-suave);font-weight:300;line-height:1.5;}
+.leg-num{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;flex-shrink:0;}
+
+/* CAT CARDS */
+.ccard{background:var(--branco);border:1px solid var(--borda);border-radius:14px;padding:18px;box-shadow:var(--sombra);display:flex;flex-direction:column;gap:8px;transition:all .2s;}
+.ccard:hover{box-shadow:var(--sombra2);transform:translateY(-2px);}
+.cc-header{display:flex;align-items:center;gap:10px;}
+.cc-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
+.cc-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--texto);line-height:1.3;}
+.cc-num{margin-left:auto;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;flex-shrink:0;}
+.cc-desc{font-size:12.5px;color:var(--texto-suave);line-height:1.55;font-weight:300;}
+.cc-list{font-size:11.5px;color:var(--texto-fraco);font-style:italic;border-top:1px solid var(--borda);padding-top:8px;line-height:1.6;}
+
+/* PROGRESS */
+.plist{display:flex;flex-direction:column;gap:20px;}
+.pi-header{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
+.pi-name{font-size:14px;font-weight:500;color:var(--texto);}
+.pi-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
+.pi-pct{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+.pi-status{font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;}
+.pi-track{height:9px;background:var(--areia-escura);border-radius:5px;overflow:hidden;}
+.pi-fill{height:100%;border-radius:5px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
+.pi-hint{font-size:12px;color:var(--texto-fraco);margin-top:5px;font-weight:300;line-height:1.5;}
+
+/* TIMELINE */
+.tl{display:flex;flex-direction:column;}
+.tl-item{display:flex;gap:18px;padding-bottom:24px;}
+.tl-item:last-child{padding-bottom:0;}
+.tl-left{display:flex;flex-direction:column;align-items:center;width:14px;flex-shrink:0;}
+.tl-dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:2px solid #fff;}
+.tl-line{width:2px;flex:1;background:var(--borda);margin-top:6px;border-radius:1px;}
+.tl-item:last-child .tl-line{display:none;}
+.tl-date{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--texto-fraco);margin-bottom:5px;}
+.tl-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--texto);margin-bottom:5px;}
+.tl-desc{font-size:13px;color:var(--texto-suave);line-height:1.6;font-weight:300;}
+.tl-tag{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:10px;}
+
+/* FONTES */
+.fgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;}
+.fitem{background:var(--areia);border:1px solid var(--borda);border-radius:12px;padding:14px;display:flex;align-items:flex-start;gap:10px;transition:background .15s;}
+.fitem:hover{background:var(--verde-suave);}
+.ficon{font-size:20px;flex-shrink:0;margin-top:2px;}
+.fname{font-size:13px;font-weight:600;color:var(--texto);margin-bottom:3px;line-height:1.3;}
+.fdesc{font-size:12px;color:var(--texto-suave);font-weight:300;line-height:1.45;}
+
+/* CALLOUT */
+.callout{background:var(--verde-suave);border:1px solid #A8D4BE;border-left:4px solid var(--verde-medio);border-radius:12px;padding:20px 22px;font-size:14px;color:var(--verde-principal);line-height:1.7;}
+.callout strong{font-weight:700;display:block;margin-bottom:6px;font-size:15px;}
+
+/* FOOTER */
+.footer{background:var(--verde-escuro);padding:22px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
+.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;}
+.footer-disc{font-size:12px;color:rgba(255,255,255,0.35);max-width:500px;line-height:1.6;text-align:center;}
+.footer-meta{font-size:12px;color:rgba(255,255,255,0.35);text-align:right;line-height:1.7;}
+
+/* ANIMATIONS */
+.fi{opacity:0;transform:translateY(10px);animation:fi .45s ease forwards;}
+@keyframes fi{to{opacity:1;transform:translateY(0);}}
+
+/* RESPONSIVE */
+@media(max-width:1050px){.g4{grid-template-columns:repeat(2,1fr);}.g3{grid-template-columns:1fr 1fr;}.fgrid{grid-template-columns:1fr 1fr;}.donut-wrap{flex-direction:column;}}
+@media(max-width:700px){.hdr,.main,.footer{padding-left:20px;padding-right:20px;}.hero{padding:28px 20px;}.g2,.g3,.g4{grid-template-columns:1fr;}.fgrid{grid-template-columns:1fr;}.kpi-strip{flex-wrap:wrap;}.kpi-item{flex:1 1 40%;}}
+</style>
+</head>
+<body>
+
+<div class="hdr">
+  <a href="index.html" style="text-decoration:none">
+    <div class="hdr-logo">PlanUrbi <span>Painel Executivo</span></div>
+  </a>
+  <button class="btn-back" onclick="window.location.href='index.html'">← Ver todos os mapas</button>
+</div>
+
+<div class="hero">
+  <div class="hero-in">
+    <div class="hero-tag">Produto 02 · Barra de São Miguel · AL · FEPESA 2025</div>
+    <h1 class="hero-h1">O que foi mapeado?</h1>
+    <p class="hero-sub">
+      Este painel resume, em linguagem acessível, o trabalho de diagnóstico territorial feito para o município.
+      São 31 mapas temáticos que mostram como é Barra de São Miguel hoje —
+      seu território, seu ambiente, sua infraestrutura e seu potencial turístico.
+    </p>
+    <div class="kpi-strip">
+      <div class="kpi-item"><div class="kpi-icon">🗺️</div><div class="kpi-v">31</div><div class="kpi-l">Mapas produzidos</div></div>
+      <div class="kpi-item"><div class="kpi-icon">✅</div><div class="kpi-v">17</div><div class="kpi-l">Dados confirmados</div></div>
+      <div class="kpi-item"><div class="kpi-icon">🔍</div><div class="kpi-v">14</div><div class="kpi-l">Em aprofundamento</div></div>
+      <div class="kpi-item"><div class="kpi-icon">📂</div><div class="kpi-v">8</div><div class="kpi-l">Temas analisados</div></div>
+      <div class="kpi-item"><div class="kpi-icon">🏛️</div><div class="kpi-v">10+</div><div class="kpi-l">Fontes de dados</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="main">
+
+  <!-- OS DOIS GRUPOS -->
+  <div>
+    <div class="stitle">Os dois grupos de mapas</div>
+    <div class="g2">
+      <div class="bloco bv fi" style="animation-delay:.05s">
+        <div class="b-icon">✅</div>
+        <div class="b-num">17</div>
+        <div class="b-title">Mapas Confirmados</div>
+        <div class="b-desc">Feitos com dados oficiais de órgãos como IBGE, SPU e Embrapa — informações sólidas, verificadas e prontas para uso em decisões de planejamento e licenciamento.</div>
+        <div class="b-badge">✓ Prontos para uso oficial</div>
+      </div>
+      <div class="bloco bs fi" style="animation-delay:.1s">
+        <div class="b-icon">🔍</div>
+        <div class="b-num">14</div>
+        <div class="b-title">Mapas em Aprofundamento</div>
+        <div class="b-desc">Levantamentos iniciais completos, mas que ainda precisam de mais visitas de campo e validações com secretarias municipais para serem conclusivos.</div>
+        <div class="b-badge">⏳ Serão aprofundados</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISTRIBUIÇÃO VISUAL -->
+  <div>
+    <div class="stitle">Distribuição dos mapas</div>
+    <div class="card fi" style="animation-delay:.1s">
+      <div class="ctitle">55% dos mapas já estão plenamente confirmados</div>
+      <div class="csub">Os outros 45% têm dados levantados — serão refinados nas próximas etapas do Diagnóstico Inteligente.</div>
+      <div class="donut-wrap">
+        <div style="flex-shrink:0"><canvas id="chartDonut" width="190" height="190"></canvas></div>
+        <div class="donut-legend">
+          <div class="leg-row">
+            <div class="leg-color" style="background:#2D6B52"></div>
+            <div class="leg-info">
+              <div class="leg-name">Confirmados — Bloco I</div>
+              <div class="leg-exp">Limites, zoneamento, geologia, vegetação, terrenos de marinha — dados de órgãos federais e estaduais, aprovados tecnicamente.</div>
+            </div>
+            <div class="leg-num" style="color:#2D6B52">17</div>
+          </div>
+          <div class="leg-row">
+            <div class="leg-color" style="background:#8B6914"></div>
+            <div class="leg-info">
+              <div class="leg-name">Em Aprofundamento — Bloco II</div>
+              <div class="leg-exp">Infraestrutura, turismo, equipamentos, meio ambiente — levantamentos iniciais feitos, serão detalhados com mais campo e dados das secretarias.</div>
+            </div>
+            <div class="leg-num" style="color:#8B6914">14</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- O QUE CADA TEMA ANALISA -->
+  <div>
+    <div class="stitle">O que cada tema analisa?</div>
+    <div class="g4">
+      <div class="ccard fi" style="animation-delay:.05s;border-top:3px solid #2D6B52">
+        <div class="cc-header"><div class="cc-dot" style="background:#2D6B52"></div><div class="cc-name">Limites e Zoneamento</div><div class="cc-num" style="color:#2D6B52">7</div></div>
+        <div class="cc-desc">Define o território municipal, divide os bairros e mostra o que pode ser construído em cada área da cidade.</div>
+        <div class="cc-list">Limites, bairros, perímetro urbano, zoneamento, expansão urbana</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.1s;border-top:3px solid #4A7BA8">
+        <div class="cc-header"><div class="cc-dot" style="background:#4A7BA8"></div><div class="cc-name">Aspectos Físicos e Naturais</div><div class="cc-num" style="color:#4A7BA8">8</div></div>
+        <div class="cc-desc">Mostra como é o terreno: tipo de solo, relevo, rios, vegetação e APPs. Essencial para evitar construções em locais inadequados.</div>
+        <div class="cc-list">Geologia, solo, relevo, declividade, rios, vegetação, proteção ambiental</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.15s;border-top:3px solid #2A7E8C">
+        <div class="cc-header"><div class="cc-dot" style="background:#2A7E8C"></div><div class="cc-name">Terrenos de Marinha</div><div class="cc-num" style="color:#2A7E8C">1</div></div>
+        <div class="cc-desc">Delimita as faixas da orla que pertencem ao Governo Federal. Fundamental para regularizar imóveis e licenciar empreendimentos na costa.</div>
+        <div class="cc-list">Limites dos terrenos de marinha (SPU)</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.2s;border-top:3px solid #8B6914">
+        <div class="cc-header"><div class="cc-dot" style="background:#8B6914"></div><div class="cc-name">Uso e Ocupação do Solo</div><div class="cc-num" style="color:#8B6914">1</div></div>
+        <div class="cc-desc">Mostra como o município está sendo usado hoje: casas, comércios, áreas agrícolas e vegetação — base para planejar o crescimento.</div>
+        <div class="cc-list">Uso e ocupação da terra</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.25s;border-top:3px solid #3D8A3A">
+        <div class="cc-header"><div class="cc-dot" style="background:#3D8A3A"></div><div class="cc-name">Aspectos Ambientais</div><div class="cc-num" style="color:#3D8A3A">4</div></div>
+        <div class="cc-desc">Identifica áreas verdes, zonas de risco, atividades que causam impacto e áreas com potencial de conservação ambiental.</div>
+        <div class="cc-list">Potencial ambiental, áreas verdes, riscos, atividades impactantes</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.3s;border-top:3px solid #7A5C3A">
+        <div class="cc-header"><div class="cc-dot" style="background:#7A5C3A"></div><div class="cc-name">Infraestrutura Urbana</div><div class="cc-num" style="color:#7A5C3A">6</div></div>
+        <div class="cc-desc">Mostra onde chegam os serviços essenciais: água, esgoto, luz pública, internet, coleta de lixo e as vias de acesso.</div>
+        <div class="cc-list">Rede viária, iluminação, esgoto, água, resíduos, telefonia móvel</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.35s;border-top:3px solid #6A3A7A">
+        <div class="cc-header"><div class="cc-dot" style="background:#6A3A7A"></div><div class="cc-name">Equipamentos Públicos</div><div class="cc-num" style="color:#6A3A7A">1</div></div>
+        <div class="cc-desc">Localiza escolas, postos de saúde, assistência social e órgãos públicos — revela onde a população é atendida e onde faltam serviços.</div>
+        <div class="cc-list">Saúde, educação, assistência social, segurança</div>
+      </div>
+      <div class="ccard fi" style="animation-delay:.4s;border-top:3px solid #A05C28">
+        <div class="cc-header"><div class="cc-dot" style="background:#A05C28"></div><div class="cc-name">Turismo</div><div class="cc-num" style="color:#A05C28">3</div></div>
+        <div class="cc-desc">Mapeia pontos turísticos naturais, culturais e a infraestrutura de apoio ao visitante — base para impulsionar o turismo sustentável.</div>
+        <div class="cc-list">Infraestrutura turística, atrativos turísticos, atrativos naturais e culturais</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- QUANTIDADE POR TEMA -->
+  <div>
+    <div class="stitle">Quantidade de mapas por tema</div>
+    <div class="card fi" style="animation-delay:.1s">
+      <div class="ctitle">Atenção dedicada a cada área</div>
+      <div class="csub">Os temas com mais mapas foram analisados com maior profundidade — diferentes recortes do mesmo assunto.</div>
+      <div style="height:220px;margin-top:8px"><canvas id="chartBar"></canvas></div>
+    </div>
+  </div>
+
+  <!-- NÍVEL DE DETALHAMENTO -->
+  <div>
+    <div class="stitle">Nível de detalhamento por tema</div>
+    <div class="card fi" style="animation-delay:.1s">
+      <div class="ctitle">Quanto cada tema já está mapeado?</div>
+      <div class="csub">Temas do Bloco I: 100% consolidados. Temas do Bloco II: levantados e em aprofundamento nas próximas fases.</div>
+      <div class="plist" id="plist"></div>
+    </div>
+  </div>
+
+  <!-- COMO FOI FEITO -->
+  <div>
+    <div class="stitle">Como o trabalho foi feito?</div>
+    <div class="card fi" style="animation-delay:.1s">
+      <div class="ctitle" style="margin-bottom:22px">Etapas do Diagnóstico — Produto 02</div>
+      <div class="tl">
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:#4A7BA8;box-shadow:0 0 0 2px #C0D5EC"></div><div class="tl-line"></div></div>
+          <div style="flex:1;padding-top:0">
+            <div class="tl-date">Ago–Set 2024</div>
+            <div class="tl-title">Pesquisa de dados em órgãos oficiais</div>
+            <div class="tl-desc">A equipe coletou informações do IBGE, SPU, CPRM, Embrapa, IMA-AL e ANATEL — as mesmas bases usadas em qualquer planejamento municipal sério no Brasil.</div>
+            <span class="tl-tag" style="background:#E8F0F8;color:#4A7BA8">Gabinete</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:var(--verde-medio);box-shadow:0 0 0 2px #C0D8CC"></div><div class="tl-line"></div></div>
+          <div style="flex:1;padding-top:0">
+            <div class="tl-date">Out–Nov 2024</div>
+            <div class="tl-title">Produção dos 17 mapas confirmados</div>
+            <div class="tl-desc">Com os dados em mãos, foram produzidos os mapas de limites, zoneamento, solo, vegetação e terrenos de marinha — cada um verificado tecnicamente no software QGIS antes de ser entregue.</div>
+            <span class="tl-tag" style="background:var(--bg-v);color:var(--validado)">✓ Bloco I concluído</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:var(--situacional);box-shadow:0 0 0 2px #DDD0A0"></div><div class="tl-line"></div></div>
+          <div style="flex:1;padding-top:0">
+            <div class="tl-date">Dez 2024 – Jan 2025</div>
+            <div class="tl-title">Visitas de campo em Barra de São Miguel</div>
+            <div class="tl-desc">A equipe esteve presencialmente no município com GPS de alta precisão e drones, registrando: uso do solo, infraestrutura, pontos turísticos, equipamentos públicos e áreas de risco.</div>
+            <span class="tl-tag" style="background:var(--bg-s);color:var(--situacional)">🚁 Levantamento de campo</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:#2ECC8A;box-shadow:0 0 0 2px #B0EACC"></div><div class="tl-line"></div></div>
+          <div style="flex:1;padding-top:0">
+            <div class="tl-date">Fevereiro 2025</div>
+            <div class="tl-title">Entrega oficial do Produto 02</div>
+            <div class="tl-desc">Os 31 mapas foram entregues ao município em 3 formatos: Shapefile (para sistemas GIS), KMZ (para Google Earth) e PDF — organizados em pastas temáticas no repositório de nuvem.</div>
+            <span class="tl-tag" style="background:#E0FAF0;color:#1A7A52">✓ Entregue e homologado</span>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-left"><div class="tl-dot" style="background:var(--borda);border:2px dashed #bbb"></div></div>
+          <div style="flex:1;padding-top:0">
+            <div class="tl-date" style="color:var(--texto-fraco)">Próximas etapas</div>
+            <div class="tl-title" style="color:var(--texto-suave)">Aprofundamento do Diagnóstico Inteligente</div>
+            <div class="tl-desc">Os 14 mapas situacionais serão detalhados com mais visitas de campo, articulação com secretarias municipais e validação com órgãos estaduais.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FONTES -->
+  <div>
+    <div class="stitle">De onde vêm os dados?</div>
+    <div class="fgrid">
+      <div class="fitem fi" style="animation-delay:.05s"><div class="ficon">🏛️</div><div><div class="fname">IBGE 2024</div><div class="fdesc">Instituto Brasileiro de Geografia e Estatística — malha municipal, setores censitários e limites administrativos atualizados.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.08s"><div class="ficon">⚓</div><div><div class="fname">SPU — Patrimônio da União</div><div class="fdesc">Secretaria do Patrimônio da União — dados das faixas costeiras que pertencem ao Governo Federal.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.11s"><div class="ficon">🌍</div><div><div class="fname">CPRM / SGB 2024</div><div class="fdesc">Serviço Geológico do Brasil — dados de geologia, relevo e recursos hídricos do município.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.14s"><div class="ficon">🌱</div><div><div class="fname">Embrapa</div><div class="fdesc">Empresa Brasileira de Pesquisa Agropecuária — tipos de solo e uso agropecuário da terra.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.17s"><div class="ficon">🌿</div><div><div class="fname">IMA-AL</div><div class="fdesc">Instituto do Meio Ambiente de Alagoas — áreas de proteção ambiental estaduais e ecossistemas locais.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.2s"><div class="ficon">📋</div><div><div class="fname">Plano Diretor 2008</div><div class="fdesc">Legislação municipal vigente — zoneamentos, perímetros e regras de uso do solo já estabelecidos.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.23s"><div class="ficon">📡</div><div><div class="fname">ANATEL 2025</div><div class="fdesc">Agência Nacional de Telecomunicações — cobertura de telefonia móvel e conectividade.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.26s"><div class="ficon">🛸</div><div><div class="fname">Modelo Digital de Elevação 2024</div><div class="fdesc">Imagens de satélite que permitem calcular o relevo, as altitudes e as inclinações do terreno com precisão.</div></div></div>
+      <div class="fitem fi" style="animation-delay:.29s"><div class="ficon">🔭</div><div><div class="fname">Campo FEPESA 2025</div><div class="fdesc">Levantamentos in loco com GPS de alta precisão e drones — feitos pela equipe técnica no próprio município.</div></div></div>
+    </div>
+  </div>
+
+  <!-- CALLOUT FINAL -->
+  <div class="callout fi" style="animation-delay:.1s">
+    <strong>O que esses mapas representam para o município?</strong>
+    Pela primeira vez, Barra de São Miguel tem um banco de dados geoespacial estruturado, atualizado e organizado por temas.
+    Isso permite que a gestão municipal tome decisões com base em dados reais:
+    onde investir em infraestrutura, onde preservar o ambiente, onde licenciar empreendimentos, onde ampliar serviços públicos.
+    Os arquivos estão em formatos editáveis — a Prefeitura pode continuar atualizando e usando nos próximos anos.
+  </div>
+
+</div><!-- /main -->
+
+<div class="footer">
+  <div style="max-width:1300px;margin:0 auto;width:100%">
+
+    <!-- TOP ROW -->
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:40px;padding-bottom:32px;border-bottom:1px solid rgba(255,255,255,0.1);margin-bottom:22px;">
+
+      <!-- MARCA -->
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:10px;">PlanUrbi</div>
+        <div style="font-size:13px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.6;max-width:220px;margin-bottom:18px;">Planejamento territorial inteligente para Barra de São Miguel, Alagoas.</div>
+        <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:.5px;">v4.0 · Produto 02 · Fev/2025</div>
+      </div>
+
+      <!-- EQUIPE -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;">Equipe de Coordenação</div>
+        <div style="display:flex;flex-direction:column;gap:12px;">
+          <div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);">Ricardo Antônio de Barros Wanderley</div><div style="font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:2px;">Coordenação Executiva</div></div>
+          <div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);">Dra. Melissa Mota Alcides</div><div style="font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:2px;">Coordenação de Urbanismo</div></div>
+          <div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);">Dra. Raquel Cabral</div><div style="font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:2px;">Coordenação de Tecnologia</div></div>
+          <div><div style="font-size:13px;font-weight:600;color:rgba(255,255,255,0.85);">Ms. Rute Ferreira Barbosa</div><div style="font-size:11.5px;color:rgba(255,255,255,0.35);margin-top:2px;">Coordenação de Geoprocessamento</div></div>
+        </div>
+      </div>
+
+      <!-- CONTATO -->
+      <div>
+        <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.3);margin-bottom:16px;">Contato e Links</div>
+        <div style="display:flex;flex-direction:column;gap:11px;">
+          <a href="mailto:projeto@planurbi.com.br" style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">
+            <span style="width:28px;height:28px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">✉️</span>projeto@planurbi.com.br
+          </a>
+          <a href="https://www.planurbi.com.br" target="_blank" style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">
+            <span style="width:28px;height:28px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">🌐</span>www.planurbi.com.br
+          </a>
+          <a href="https://instagram.com/planurbi_" target="_blank" style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">
+            <span style="width:28px;height:28px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">📸</span>@planurbi_
+          </a>
+          <a href="index.html" style="display:flex;align-items:center;gap:10px;font-size:13px;color:rgba(255,255,255,0.6);text-decoration:none;">
+            <span style="width:28px;height:28px;background:rgba(255,255,255,0.07);border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;">🗺️</span>Painel de Mapas
+          </a>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOTTOM ROW -->
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;">
+      <div style="font-size:11.5px;color:rgba(255,255,255,0.28);line-height:1.7;">
+        © 2026 PlanUrbi — Departamento de Desenvolvimento de Soluções Tecnológicas<br>
+        Todos os direitos reservados · FEPESA · Barra de São Miguel / AL
+      </div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.2);text-align:right;line-height:1.6;max-width:400px;">
+        Painel de visualização — fonte oficial: GeoPackage + Projeto QGIS + Mapas em PDF.<br>
+        Manutenção contínua depende de aditivo contratual com a FEPESA.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.color='#5A5A52';
+
+new Chart(document.getElementById('chartDonut'),{
+  type:'doughnut',
+  data:{
+    labels:['Confirmados (Bloco I)','Em Aprofundamento (Bloco II)'],
+    datasets:[{data:[17,14],backgroundColor:['#2D6B52','#8B6914'],borderColor:['#fff','#fff'],borderWidth:3,hoverOffset:8}]
+  },
+  options:{responsive:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A4D3A',padding:12,callbacks:{label:ctx=>` ${ctx.parsed} mapas (${Math.round(ctx.parsed/31*100)}% do total)`}}},animation:{animateRotate:true,duration:1400}}
+});
+
+const catD=[
+  {n:'Limites e\nZoneamento',q:7,c:'#2D6B52'},
+  {n:'Aspectos\nFísicos',q:8,c:'#4A7BA8'},
+  {n:'Terrenos de\nMarinha',q:1,c:'#2A7E8C'},
+  {n:'Uso do\nSolo',q:1,c:'#8B6914'},
+  {n:'Meio\nAmbiente',q:4,c:'#3D8A3A'},
+  {n:'Infraestrutura\nUrbana',q:6,c:'#7A5C3A'},
+  {n:'Equip.\nPúblicos',q:1,c:'#6A3A7A'},
+  {n:'Turismo',q:3,c:'#A05C28'},
+];
+
+new Chart(document.getElementById('chartBar'),{
+  type:'bar',
+  data:{
+    labels:catD.map(d=>d.n),
+    datasets:[{data:catD.map(d=>d.q),backgroundColor:catD.map(d=>d.c+'CC'),borderColor:catD.map(d=>d.c),borderWidth:1.5,borderRadius:8,borderSkipped:false,hoverBackgroundColor:catD.map(d=>d.c)}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{backgroundColor:'#1A4D3A',padding:12,callbacks:{label:ctx=>` ${ctx.parsed.y} mapa${ctx.parsed.y>1?'s':''} nessa categoria`}}},scales:{x:{grid:{display:false},border:{display:false},ticks:{font:{size:11},maxRotation:0}},y:{grid:{color:'rgba(0,0,0,0.04)'},border:{display:false},ticks:{stepSize:1},max:10}},animation:{duration:1000}}
+});
+
+const pData=[
+  {n:'Limites e Zoneamento',p:100,c:'#2D6B52',ok:true,h:'Todos os 7 mapas com dados oficiais do IBGE e Plano Diretor.'},
+  {n:'Aspectos Físicos e Naturais',p:100,c:'#4A7BA8',ok:true,h:'Todos os 8 mapas com dados do CPRM, Embrapa e IBGE.'},
+  {n:'Terrenos de Marinha',p:100,c:'#2A7E8C',ok:true,h:'Delimitação oficial da SPU totalmente mapeada.'},
+  {n:'Aspectos Ambientais',p:65,c:'#3D8A3A',ok:false,h:'APPs confirmadas. Áreas de risco e potencial ambiental precisam de mais validação de campo.'},
+  {n:'Uso e Ocupação do Solo',p:60,c:'#8B6914',ok:false,h:'Levantamento inicial completo. Será refinado com mais dados nas próximas etapas.'},
+  {n:'Infraestrutura Urbana',p:55,c:'#7A5C3A',ok:false,h:'Rede viária e iluminação com bom nível. Água e esgoto precisam de levantamento de campo mais detalhado.'},
+  {n:'Equipamentos Públicos',p:60,c:'#6A3A7A',ok:false,h:'Equipamentos identificados. Precisa de validação junto às secretarias municipais.'},
+  {n:'Turismo',p:65,c:'#A05C28',ok:false,h:'Atrativos mapeados. Infraestrutura turística será detalhada com apoio da gestão local.'},
+];
+
+const pl=document.getElementById('plist');
+pData.forEach((d,i)=>{
+  pl.innerHTML+=`<div class="pi-header"><span class="pi-name">${d.n}</span><div class="pi-right"><span class="pi-pct" style="color:${d.c}">${d.p}%</span><span class="pi-status" style="background:${d.ok?'#E8F2EE':'#FDF3D8'};color:${d.ok?'#2D6B52':'#8B6914'}">${d.ok?'✓ Confirmado':'⏳ Aprofundando'}</span></div></div><div class="pi-track"><div class="pi-fill" style="width:0%;background:${d.c}" data-w="${d.p}%"></div></div><div class="pi-hint">${d.h}</div>`;
+});
+setTimeout(()=>{document.querySelectorAll('.pi-fill').forEach(e=>e.style.width=e.dataset.w);},400);
+</script>
+</body>
+</html>

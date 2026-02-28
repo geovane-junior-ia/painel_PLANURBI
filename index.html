@@ -1,0 +1,1947 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PlanUrbi · Barra de São Miguel — Mapas Temáticos</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde-escuro: #0F3328;
+    --verde-principal: #1A4D3A;
+    --verde-medio: #2D6B52;
+    --verde-claro: #3D8A6A;
+    --verde-suave: #E8F2EE;
+    --areia: #F5F0E8;
+    --areia-escura: #E8DFCF;
+    --branco: #FAFAF8;
+    --texto: #1C1C1A;
+    --texto-suave: #5A5A52;
+    --texto-muito-suave: #9A9A8E;
+    --borda: #D8D4C8;
+    --accent-validado: #2D6B52;
+    --accent-situacional: #8B6914;
+    --bg-validado: #E8F2EE;
+    --bg-situacional: #FDF3D8;
+    --sombra: 0 2px 20px rgba(15,51,40,0.08);
+    --sombra-hover: 0 8px 40px rgba(15,51,40,0.16);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--areia);
+    color: var(--texto);
+    min-height: 100vh;
+  }
+
+  /* ─── HEADER ─── */
+  header {
+    background: var(--verde-escuro);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .header-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 32px;
+    height: 68px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-shrink: 0;
+  }
+
+  .logo-text {
+    font-family: 'Syne', sans-serif;
+    font-size: 22px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+  }
+
+  .logo-text span {
+    font-weight: 300;
+    font-size: 11px;
+    display: block;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.55);
+    margin-top: 1px;
+  }
+
+  .logo-divider { width: 1px; height: 32px; background: rgba(255,255,255,0.15); }
+
+  .produto-badge {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.5);
+    padding: 4px 10px;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 4px;
+  }
+
+  .header-search {
+    flex: 1;
+    max-width: 400px;
+    position: relative;
+  }
+
+  .header-search input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.12);
+    color: #fff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    padding: 9px 16px 9px 40px;
+    border-radius: 8px;
+    outline: none;
+    transition: all 0.2s;
+  }
+
+  .header-search input::placeholder { color: rgba(255,255,255,0.35); }
+  .header-search input:focus {
+    background: rgba(255,255,255,0.13);
+    border-color: rgba(255,255,255,0.3);
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 13px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(255,255,255,0.4);
+    pointer-events: none;
+    font-size: 15px;
+  }
+
+  .btn-header {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    padding: 7px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.8);
+  }
+
+  .btn-header:hover { background: rgba(255,255,255,0.08); color: #fff; }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: linear-gradient(135deg, var(--verde-escuro) 0%, var(--verde-principal) 60%, var(--verde-medio) 100%);
+    padding: 48px 32px 40px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 320px; height: 320px;
+    background: radial-gradient(circle, rgba(61,138,106,0.15) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .hero-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 40px;
+    align-items: end;
+  }
+
+  .hero-title {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(26px, 3vw, 40px);
+    font-weight: 800;
+    color: #fff;
+    line-height: 1.1;
+    letter-spacing: -1px;
+  }
+
+  .hero-title em { font-style: normal; color: rgba(255,255,255,0.55); }
+
+  .hero-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.6);
+    margin-top: 10px;
+    max-width: 540px;
+    line-height: 1.6;
+  }
+
+  .stats-row {
+    display: flex;
+    gap: 32px;
+    margin-top: 28px;
+  }
+
+  .stat-item { display: flex; flex-direction: column; gap: 2px; }
+
+  .stat-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+  }
+
+  .stat-divider {
+    width: 1px;
+    background: rgba(255,255,255,0.12);
+    align-self: stretch;
+    margin: 4px 0;
+  }
+
+  /* Hero preview — thumbnail do Mapa 1 */
+  .hero-preview {
+    width: 240px;
+    height: 150px;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 2px solid rgba(255,255,255,0.15);
+    box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+    flex-shrink: 0;
+    position: relative;
+  }
+
+  .hero-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-preview-label {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(transparent, rgba(0,0,0,0.6));
+    color: rgba(255,255,255,0.8);
+    font-size: 11px;
+    padding: 16px 10px 7px;
+    font-weight: 500;
+  }
+
+  /* ─── MAIN LAYOUT ─── */
+  .main-layout {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 32px 32px 60px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 28px;
+    align-items: start;
+  }
+
+  /* ─── SIDEBAR ─── */
+  .sidebar { position: sticky; top: 88px; }
+
+  .sidebar-section {
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-bottom: 16px;
+    box-shadow: var(--sombra);
+  }
+
+  .sidebar-header {
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--borda);
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    color: var(--texto-muito-suave);
+  }
+
+  .filter-group { padding: 10px; }
+
+  .filter-btn {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding: 9px 10px;
+    border: none;
+    background: transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13.5px;
+    color: var(--texto-suave);
+    text-align: left;
+    transition: all 0.15s;
+  }
+
+  .filter-btn:hover { background: var(--areia); color: var(--texto); }
+  .filter-btn.active { background: var(--verde-suave); color: var(--verde-principal); font-weight: 500; }
+
+  .filter-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  .filter-count {
+    margin-left: auto;
+    font-size: 11px;
+    background: var(--borda);
+    color: var(--texto-suave);
+    padding: 2px 7px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+
+  .filter-btn.active .filter-count { background: var(--verde-principal); color: #fff; }
+
+  .tipo-filter { padding: 10px; display: flex; flex-direction: column; gap: 4px; }
+
+  .tipo-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 9px 10px;
+    border: 1.5px solid var(--borda);
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    background: transparent;
+    transition: all 0.15s;
+    text-align: left;
+  }
+
+  .tipo-btn.all { color: var(--texto-suave); }
+  .tipo-btn.all.active, .tipo-btn.all:hover { background: var(--areia); border-color: var(--borda); color: var(--texto); }
+  .tipo-btn.validado { color: var(--accent-validado); }
+  .tipo-btn.validado.active, .tipo-btn.validado:hover { background: var(--bg-validado); border-color: var(--accent-validado); }
+  .tipo-btn.situacional { color: var(--accent-situacional); }
+  .tipo-btn.situacional.active, .tipo-btn.situacional:hover { background: var(--bg-situacional); border-color: var(--accent-situacional); }
+
+  .tipo-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
+
+  /* ─── CONTENT ─── */
+  .content-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    gap: 16px;
+  }
+
+  .results-info { font-size: 14px; color: var(--texto-suave); }
+  .results-info strong { color: var(--texto); font-weight: 600; }
+
+  .toolbar-right { display: flex; align-items: center; gap: 10px; }
+
+  select {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    padding: 7px 10px;
+    border: 1px solid var(--borda);
+    border-radius: 7px;
+    background: var(--branco);
+    color: var(--texto);
+    cursor: pointer;
+    outline: none;
+    box-shadow: var(--sombra);
+  }
+
+  .view-toggle {
+    display: flex;
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+  }
+
+  .view-btn {
+    width: 36px; height: 34px;
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--texto-muito-suave);
+    font-size: 14px;
+    transition: all 0.15s;
+  }
+
+  .view-btn.active { background: var(--verde-principal); color: #fff; }
+
+  /* ─── CATEGORY HEADER ─── */
+  .categoria-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 28px 0 14px;
+  }
+  .categoria-header:first-of-type { margin-top: 0; }
+
+  .cat-dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  .cat-titulo { font-family: 'Syne', sans-serif; font-size: 15px; font-weight: 700; color: var(--texto); }
+  .cat-line { flex: 1; height: 1px; background: var(--borda); }
+  .cat-count-badge {
+    font-size: 11px; font-weight: 600; color: var(--texto-muito-suave);
+    background: var(--borda); padding: 2px 8px; border-radius: 20px;
+  }
+
+  /* ─── GRID CARDS ─── */
+  .maps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 18px;
+  }
+
+  .maps-list { display: flex; flex-direction: column; gap: 10px; }
+
+  /* ─── MAP CARD (GRID) ─── */
+  .map-card {
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    transition: all 0.25s;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  .map-card:hover {
+    box-shadow: var(--sombra-hover);
+    transform: translateY(-3px);
+    border-color: var(--verde-claro);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card-thumb {
+    height: 160px;
+    position: relative;
+    overflow: hidden;
+    background: var(--areia-escura);
+  }
+
+  .card-thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.4s ease;
+  }
+
+  .map-card:hover .card-thumb img { transform: scale(1.04); }
+
+  .card-num {
+    position: absolute;
+    bottom: 8px;
+    left: 8px;
+    font-family: 'Syne', sans-serif;
+    font-size: 11px;
+    font-weight: 700;
+    color: #fff;
+    background: rgba(0,0,0,0.5);
+    padding: 2px 8px;
+    border-radius: 4px;
+    backdrop-filter: blur(4px);
+  }
+
+  .card-tipo-badge {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    font-size: 10px;
+    font-weight: 600;
+    padding: 3px 8px;
+    border-radius: 4px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    backdrop-filter: blur(4px);
+  }
+
+  .badge-validado { background: rgba(45,107,82,0.88); color: #fff; }
+  .badge-situacional { background: rgba(139,105,20,0.88); color: #fff; }
+
+  .card-body {
+    padding: 13px 15px 15px;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .card-categoria {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--texto-muito-suave);
+  }
+
+  .card-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--texto);
+    line-height: 1.3;
+  }
+
+  .card-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: auto;
+    padding-top: 10px;
+    border-top: 1px solid var(--borda);
+  }
+
+  .card-source { font-size: 11px; color: var(--texto-muito-suave); }
+
+  .card-actions { display: flex; gap: 4px; }
+
+  .icon-btn {
+    width: 28px; height: 28px;
+    border: none; background: var(--areia);
+    border-radius: 6px; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--texto-suave); font-size: 12px;
+    transition: all 0.15s;
+  }
+
+  .icon-btn:hover { background: var(--verde-suave); color: var(--verde-principal); }
+
+  /* ─── LIST CARD ─── */
+  .map-card-list {
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: var(--sombra);
+    transition: all 0.2s;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 10px 16px 10px 10px;
+    animation: fadeIn 0.3s ease both;
+  }
+
+  .map-card-list:hover { box-shadow: var(--sombra-hover); border-color: var(--verde-claro); }
+
+  .list-thumb {
+    width: 80px; height: 56px;
+    border-radius: 8px;
+    overflow: hidden;
+    flex-shrink: 0;
+    background: var(--areia-escura);
+  }
+
+  .list-thumb img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .list-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 13px; font-weight: 700;
+    color: var(--texto-muito-suave);
+    width: 28px; flex-shrink: 0; text-align: center;
+  }
+
+  .list-info { flex: 1; min-width: 0; }
+
+  .list-cat {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 1px; text-transform: uppercase;
+    color: var(--texto-muito-suave); margin-bottom: 3px;
+  }
+
+  .list-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: var(--texto);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+
+  .list-meta { font-size: 12px; color: var(--texto-muito-suave); margin-top: 2px; }
+
+  .list-badge {
+    font-size: 10px; font-weight: 600;
+    padding: 3px 8px; border-radius: 4px;
+    letter-spacing: 0.5px; text-transform: uppercase;
+    flex-shrink: 0;
+  }
+
+  /* ─── EMPTY STATE ─── */
+  .empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--texto-muito-suave);
+  }
+
+  .empty-icon { font-size: 48px; margin-bottom: 12px; opacity: 0.4; }
+  .empty-state h3 { font-family: 'Syne', sans-serif; font-size: 18px; color: var(--texto-suave); margin-bottom: 8px; }
+
+  /* ─── MODAL ─── */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(10,30,20,0.7);
+    z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(8px);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+  }
+
+  .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+  .modal {
+    background: var(--branco);
+    border-radius: 20px;
+    width: 100%;
+    max-width: 800px;
+    max-height: 92vh;
+    overflow-y: auto;
+    box-shadow: 0 32px 96px rgba(0,0,0,0.4);
+    transform: scale(0.96) translateY(8px);
+    transition: transform 0.25s cubic-bezier(0.34,1.2,0.64,1);
+  }
+
+  .modal-overlay.open .modal { transform: scale(1) translateY(0); }
+
+  .modal-header {
+    padding: 20px 24px 16px;
+    background: var(--verde-principal);
+    display: flex; align-items: flex-start;
+    justify-content: space-between; gap: 16px;
+    position: sticky; top: 0; z-index: 1;
+    border-radius: 20px 20px 0 0;
+  }
+
+  .modal-num {
+    font-family: 'Syne', sans-serif;
+    font-size: 11px; font-weight: 700; letter-spacing: 1px;
+    color: rgba(255,255,255,0.5); text-transform: uppercase; margin-bottom: 4px;
+  }
+
+  .modal-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 20px; font-weight: 800; color: #fff; line-height: 1.2;
+  }
+
+  .modal-header-btns { display: flex; gap: 6px; flex-shrink: 0; }
+
+  .modal-close, .modal-zoom-btn {
+    width: 34px; height: 34px;
+    border: 1.5px solid rgba(255,255,255,0.2);
+    background: transparent; border-radius: 8px;
+    cursor: pointer; color: rgba(255,255,255,0.7);
+    font-size: 15px; display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0; transition: all 0.15s;
+  }
+
+  .modal-close:hover, .modal-zoom-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+
+  .modal-body { padding: 0 0 24px; }
+
+  /* Map image in modal — click to open lightbox */
+  .modal-map-wrap {
+    position: relative;
+    background: var(--areia);
+    cursor: zoom-in;
+    overflow: hidden;
+  }
+
+  .modal-map-img {
+    width: 100%;
+    max-height: 380px;
+    object-fit: contain;
+    display: block;
+    transition: transform 0.3s ease;
+  }
+
+  .modal-map-zoom-hint {
+    position: absolute;
+    bottom: 10px; right: 10px;
+    background: rgba(15,51,40,0.7);
+    color: rgba(255,255,255,0.85);
+    font-size: 11px; font-weight: 500;
+    padding: 5px 10px; border-radius: 6px;
+    display: flex; align-items: center; gap: 5px;
+    pointer-events: none;
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s;
+  }
+
+  .modal-map-wrap:hover .modal-map-zoom-hint { opacity: 0; }
+
+  /* ─── LIGHTBOX (tela cheia) ─── */
+  .lightbox {
+    position: fixed; inset: 0;
+    z-index: 2000;
+    background: rgba(0,0,0,0.95);
+    display: flex; align-items: center; justify-content: center;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+    cursor: zoom-out;
+  }
+
+  .lightbox.open { opacity: 1; pointer-events: all; }
+
+  .lightbox-img-wrap {
+    position: relative;
+    width: 100%; height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    overflow: auto;
+    padding: 56px 12px 12px;
+  }
+
+  .lightbox img {
+    max-width: none;
+    max-height: none;
+    width: auto;
+    height: auto;
+    min-width: min(100%, 900px);
+    cursor: default;
+    border-radius: 4px;
+    box-shadow: 0 8px 60px rgba(0,0,0,0.5);
+    transition: transform 0.2s;
+  }
+
+  .lightbox-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 52px;
+    background: rgba(0,0,0,0.7);
+    backdrop-filter: blur(10px);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 20px;
+    z-index: 1;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .lightbox-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 14px; font-weight: 700;
+    color: rgba(255,255,255,0.85);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    max-width: calc(100% - 160px);
+  }
+
+  .lightbox-actions { display: flex; gap: 8px; align-items: center; }
+
+  .lb-btn {
+    height: 32px; padding: 0 12px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px; cursor: pointer;
+    color: rgba(255,255,255,0.75);
+    font-size: 12px; font-weight: 500;
+    display: flex; align-items: center; gap: 5px;
+    transition: all 0.15s; font-family: 'DM Sans', sans-serif;
+  }
+
+  .lb-btn:hover { background: rgba(255,255,255,0.2); color: #fff; }
+
+  .lb-close {
+    width: 32px; height: 32px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px; cursor: pointer;
+    color: rgba(255,255,255,0.75); font-size: 16px;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+
+  .lb-close:hover { background: rgba(220,60,60,0.5); color: #fff; border-color: rgba(220,60,60,0.4); }
+
+  /* Prev / Next arrows in lightbox */
+  .lb-nav {
+    position: fixed;
+    top: 50%; transform: translateY(-50%);
+    z-index: 2;
+    width: 44px; height: 44px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; color: #fff; font-size: 20px;
+    transition: background 0.15s;
+  }
+
+  .lb-nav:hover { background: rgba(255,255,255,0.2); }
+  .lb-prev { left: 16px; }
+  .lb-next { right: 16px; }
+
+  /* ─── DESCRIPTION BOX ─── */
+  .modal-desc {
+    background: var(--verde-suave);
+    border-left: 3px solid var(--verde-medio);
+    margin: 0 24px 16px;
+    padding: 12px 14px;
+    border-radius: 0 8px 8px 0;
+    font-size: 13px;
+    color: var(--texto);
+    line-height: 1.65;
+  }
+
+  /* ─── CATEGORY INFO BANNER ─── */
+  .cat-info-banner {
+    background: var(--branco);
+    border: 1px solid var(--borda);
+    border-radius: 12px;
+    padding: 14px 18px;
+    margin-bottom: 20px;
+    border-left: 4px solid var(--verde-medio);
+    font-size: 13.5px;
+    color: var(--texto-suave);
+    line-height: 1.65;
+    box-shadow: var(--sombra);
+    display: none;
+  }
+
+  .cat-info-banner.visible { display: block; }
+  .cat-info-banner strong { color: var(--texto); font-weight: 600; display: block; margin-bottom: 4px; font-size: 14px; }
+
+  .modal-meta-section { padding: 16px 24px 0; }
+
+  .modal-meta-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .meta-item {
+    background: var(--areia);
+    border-radius: 10px;
+    padding: 11px 13px;
+  }
+
+  .meta-label {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.8px;
+    text-transform: uppercase; color: var(--texto-muito-suave); margin-bottom: 4px;
+  }
+
+  .meta-value { font-size: 13.5px; font-weight: 500; color: var(--texto); line-height: 1.4; }
+
+  .modal-actions { display: flex; gap: 10px; padding: 0 24px; }
+
+  .btn-modal {
+    flex: 1; padding: 11px;
+    border-radius: 10px; border: none; cursor: pointer;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+    transition: all 0.15s;
+    display: flex; align-items: center; justify-content: center; gap: 7px;
+  }
+
+  .btn-modal-primary { background: var(--verde-principal); color: #fff; }
+  .btn-modal-primary:hover { background: var(--verde-escuro); }
+  .btn-modal-secondary { background: var(--areia); color: var(--texto-suave); border: 1px solid var(--borda); }
+  .btn-modal-secondary:hover { background: var(--areia-escura); color: var(--texto); }
+
+  /* Progress */
+  .progress-bar-wrap { background: var(--borda); border-radius: 4px; height: 5px; overflow: hidden; margin-top: 8px; }
+  .progress-bar-fill { height: 100%; border-radius: 4px; transition: width 0.4s ease; }
+
+  /* ─── TOAST ─── */
+  .toast {
+    position: fixed; bottom: 24px; right: 24px;
+    background: var(--verde-escuro); color: #fff;
+    font-size: 13.5px; font-weight: 500;
+    padding: 12px 18px; border-radius: 10px;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+    z-index: 9999;
+    transform: translateY(20px); opacity: 0;
+    transition: all 0.3s; pointer-events: none;
+    display: flex; align-items: center; gap: 8px;
+  }
+
+  .toast.show { transform: translateY(0); opacity: 1; }
+
+  /* ─── DISCLAIMER BANNER ─── */
+  .disclaimer-banner {
+    background: #FFF8E6;
+    border-bottom: 1px solid #E8D99A;
+    padding: 10px 32px;
+  }
+
+  .disclaimer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 12.5px;
+    color: #6B5200;
+    line-height: 1.5;
+    flex-wrap: wrap;
+  }
+
+  .disclaimer-icon { font-size: 15px; flex-shrink: 0; }
+
+  .disclaimer-inner strong { font-weight: 600; }
+
+  .disclaimer-inner a {
+    color: #5A4500;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    white-space: nowrap;
+  }
+
+  .disclaimer-inner a:hover { color: #3A2E00; }
+
+  .disclaimer-close {
+    margin-left: auto;
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: #9A8840;
+    font-size: 15px;
+    padding: 2px 4px;
+    border-radius: 4px;
+    flex-shrink: 0;
+    line-height: 1;
+  }
+
+  .disclaimer-close:hover { background: rgba(0,0,0,0.06); }
+
+  /* ─── VERSION BADGE (hero) ─── */
+  .version-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.1);
+    border: 1px solid rgba(255,255,255,0.18);
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.65);
+    margin-bottom: 14px;
+    letter-spacing: 0.3px;
+  }
+
+  .version-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #7EC8A0;
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* ─── SITUACIONAL TOOLTIP ─── */
+  .situacional-info {
+    background: #FDF3D8;
+    border: 1px solid #E8C96A;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 12px;
+    color: #6B4E00;
+    line-height: 1.55;
+    margin: 8px 10px 4px;
+  }
+
+  .situacional-info strong { font-weight: 600; display: block; margin-bottom: 3px; }
+
+  /* ─── FOOTER INSTITUCIONAL ─── */
+  .site-footer {
+    background: var(--verde-escuro);
+    margin-top: 60px;
+    padding: 48px 32px 28px;
+    color: rgba(255,255,255,0.7);
+  }
+
+  .footer-inner {
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 40px;
+    padding-bottom: 36px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+
+  .footer-col-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 18px;
+  }
+
+  .team-list { display: flex; flex-direction: column; gap: 14px; }
+
+  .team-member {}
+
+  .team-name {
+    font-size: 13.5px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.88);
+    line-height: 1.3;
+  }
+
+  .team-role {
+    font-size: 12px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+    margin-top: 2px;
+  }
+
+  .contact-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .contact-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.65);
+    text-decoration: none;
+    transition: color 0.15s;
+  }
+
+  .contact-item:hover { color: rgba(255,255,255,0.9); }
+
+  .contact-icon {
+    width: 30px; height: 30px;
+    background: rgba(255,255,255,0.07);
+    border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px;
+    flex-shrink: 0;
+    transition: background 0.15s;
+  }
+
+  .contact-item:hover .contact-icon { background: rgba(255,255,255,0.12); }
+
+  .footer-logo-big {
+    font-family: 'Syne', sans-serif;
+    font-size: 28px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: -0.5px;
+    margin-bottom: 10px;
+  }
+
+  .footer-tagline {
+    font-size: 13px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 300;
+    line-height: 1.6;
+    max-width: 220px;
+    margin-bottom: 20px;
+  }
+
+  .footer-version {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(255,255,255,0.07);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 6px;
+    padding: 4px 10px;
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.4);
+    letter-spacing: 0.5px;
+  }
+
+  .footer-bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-top: 22px;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+
+  .footer-copyright {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.3);
+    line-height: 1.7;
+  }
+
+  .footer-disclaimer {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    text-align: right;
+    line-height: 1.6;
+    max-width: 420px;
+  }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 900px) {
+    .main-layout { grid-template-columns: 1fr; padding: 20px 16px 60px; }
+    .sidebar { position: static; }
+    .hero-inner { grid-template-columns: 1fr; }
+    .hero-preview { display: none; }
+    .header-inner { padding: 0 16px; gap: 8px; }
+    .maps-grid { grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
+    /* Search takes all available space */
+    .header-search { flex: 1; }
+    /* Painel Executivo button: icon only */
+    .btn-header { padding: 8px 10px; font-size: 0; }
+    .btn-header::before { font-size: 16px; content: '📊'; }
+    /* Hide logo subtitle on very narrow */
+    .logo-text span { display: none; }
+  }
+
+  @media (max-width: 560px) {
+    .stats-row { gap: 16px; }
+    .maps-grid { grid-template-columns: 1fr 1fr; }
+    .modal-meta-grid { grid-template-columns: 1fr; }
+    .card-thumb { height: 130px; }
+  }
+
+  /* ─── LIGHTBOX MOBILE ─── */
+  @media (max-width: 900px) {
+    /* Always show zoom hint on touch devices */
+    .modal-map-zoom-hint { opacity: 1 !important; }
+
+    /* Lightbox image: fill the screen, scroll to see full map */
+    .lightbox img {
+      min-width: 100%;
+      width: 100%;
+      max-width: none;
+      height: auto;
+    }
+
+    /* Easier close button on mobile */
+    .lb-close {
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+    }
+
+    .lb-nav { display: none; }
+
+    .lightbox-bar { padding: 0 14px; }
+    .lightbox-title { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="header-inner">
+    <div class="logo-area">
+      <a href="index.html" style="text-decoration:none;">
+      <div class="logo-text">
+        PlanUrbi
+        <span>Barra de São Miguel · AL</span>
+      </div>
+      </a>
+    </div>
+
+    <div class="header-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar mapa temático..." autocomplete="off">
+    </div>
+
+    <button class="btn-header" onclick="window.location.href='dashboard.html'" style="background:rgba(201,168,76,0.12);border-color:rgba(201,168,76,0.3);color:#C9A84C;">
+      📊 Painel Executivo
+    </button>
+  </div>
+</header>
+
+<!-- BANNER PAINEL EXECUTIVO -->
+<div style="background: linear-gradient(90deg, var(--verde-medio) 0%, var(--verde-claro) 100%); padding: 12px 32px; cursor:pointer;" onclick="window.location.href='dashboard.html'">
+  <div style="max-width:1400px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;">
+    <div style="display:flex;align-items:center;gap:14px;">
+      <span style="font-size:22px;">📊</span>
+      <div>
+        <div style="font-family:'Syne',sans-serif;font-size:15px;font-weight:800;color:#fff;letter-spacing:-0.3px;">Painel Executivo — Visão Geral do Diagnóstico</div>
+        <div style="font-size:12px;color:rgba(255,255,255,0.75);margin-top:1px;">Gráficos, estatísticas e resumo visual do Produto 02 para gestores</div>
+      </div>
+    </div>
+    <div style="background:#fff;color:var(--verde-principal);font-family:'Syne',sans-serif;font-size:13px;font-weight:700;padding:9px 20px;border-radius:8px;white-space:nowrap;box-shadow:0 2px 12px rgba(0,0,0,0.15);">
+      Abrir Painel ›
+    </div>
+  </div>
+</div>
+<div class="disclaimer-banner" id="disclaimerBanner">
+  <div class="disclaimer-inner">
+    <span class="disclaimer-icon">⚠️</span>
+    <span>
+      <strong>Este painel é um instrumento de visualização e comunicação.</strong>
+      A fonte oficial dos dados é a base geoespacial entregue: GeoPackage (.gpkg) + Projeto QGIS + Mapas em PDF,
+      disponíveis no <a href="https://drive.google.com/drive/folders/1x6kq65HtgPwwhSQ0WzyJvF1-RkFL5zuh" target="_blank">repositório do Drive ↗</a>.
+      O painel não substitui nem altera a entrega principal. Manutenção contínua depende de aditivo contratual.
+    </span>
+    <button class="disclaimer-close" onclick="document.getElementById('disclaimerBanner').style.display='none'" title="Fechar">✕</button>
+  </div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div>
+      <div class="version-badge">
+        <span class="version-dot"></span>
+        Snapshot do acervo · Versão 1.0 · Entrega FEPESA — Fev/2025
+      </div>
+      <div class="hero-title">Mapas Temáticos<br><em>Diagnóstico Inteligente</em></div>
+      <div class="hero-sub">Base geoespacial do Plano Diretor — 31 mapas organizados em dois blocos: validados e situacionais, cobrindo território, ambiente, infraestrutura e turismo.</div>
+      <div class="stats-row">
+        <div class="stat-item">
+          <div class="stat-num" id="statTotal">31</div>
+          <div class="stat-label">Mapas</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">17</div>
+          <div class="stat-label">Validados</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">14</div>
+          <div class="stat-label">Situacionais</div>
+        </div>
+        <div class="stat-divider"></div>
+        <div class="stat-item">
+          <div class="stat-num">8</div>
+          <div class="stat-label">Categorias</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-preview">
+      <img src="mapas/mapa_01.jpg" alt="Mapa de Limites Municipais" loading="lazy">
+      <div class="hero-preview-label">Mapa 01 — Limites Municipais</div>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main-layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+
+    <div class="sidebar-section">
+      <div class="sidebar-header">Tipo de Mapa</div>
+      <div class="tipo-filter">
+        <button class="tipo-btn all active" onclick="filterTipo('todos')">
+          <span class="tipo-dot" style="background:#888"></span>
+          Todos os mapas
+          <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--texto-suave)">31</span>
+        </button>
+        <button class="tipo-btn validado" onclick="filterTipo('validado')">
+          <span class="tipo-dot" style="background:var(--accent-validado)"></span>
+          Bloco I — Validados
+          <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--accent-validado)">17</span>
+        </button>
+        <button class="tipo-btn situacional" onclick="filterTipo('situacional')">
+          <span class="tipo-dot" style="background:var(--accent-situacional)"></span>
+          Bloco II — Situacionais
+          <span style="margin-left:auto;font-size:11px;font-weight:700;color:var(--accent-situacional)">14</span>
+        </button>
+        <div class="situacional-info">
+          <strong>⏳ O que são mapas situacionais?</strong>
+          Baseados em dados preliminares e levantamentos iniciais de campo. Requerem validação complementar nas próximas etapas do Diagnóstico. Não devem ser utilizados como base definitiva para decisões de planejamento sem confirmação técnica.
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-header">Categorias</div>
+      <div class="filter-group" id="categoriasFilter"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-header">Versão do Acervo</div>
+      <div style="padding:14px 18px 16px;">
+        <div style="font-size:13px;font-weight:600;color:var(--texto);margin-bottom:6px;">Produto 02 — v1.0</div>
+        <div style="font-size:12px;color:var(--texto-suave);line-height:1.7;">
+          <div>📅 Referência: Fevereiro de 2025</div>
+          <div>🗂️ Formato oficial: GeoPackage + QGIS</div>
+          <div>📄 Cartografia: PDF</div>
+          <div>🌐 Projeção: SIRGAS 2000 Fuso 25S</div>
+        </div>
+        <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--borda);font-size:11px;color:var(--texto-muito-suave);line-height:1.6;">
+          Este painel reflete um <em>snapshot</em> do acervo na data de entrega/homologação. Atualizações futuras dependem de processo estruturado pela Prefeitura ou de aditivo contratual com a FEPESA.
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-header">Completude</div>
+      <div style="padding:14px 18px 16px;">
+        <div style="font-size:12px;color:var(--texto-suave);margin-bottom:4px;display:flex;justify-content:space-between">
+          <span>Bloco I — Validados</span><span style="font-weight:600;color:var(--accent-validado)">100%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width:100%;background:var(--accent-validado)"></div>
+        </div>
+        <div style="font-size:12px;color:var(--texto-suave);margin:10px 0 4px;display:flex;justify-content:space-between">
+          <span>Bloco II — Situacionais</span><span style="font-weight:600;color:var(--accent-situacional)">~60%</span>
+        </div>
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill" style="width:60%;background:var(--accent-situacional)"></div>
+        </div>
+        <div style="font-size:11px;color:var(--texto-muito-suave);margin-top:10px;line-height:1.6;">
+          Mapas situacionais serão aprofundados nas próximas etapas do Diagnóstico Inteligente.
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <div class="sidebar-header">Fontes de Dados</div>
+      <div style="padding:14px 18px 16px;font-size:12.5px;color:var(--texto-suave);line-height:2;">
+        <div>📌 IBGE 2024</div>
+        <div>📌 SPU — Patrimônio da União</div>
+        <div>📌 CPRM / SGB 2024</div>
+        <div>📌 Embrapa / IMA-AL</div>
+        <div>📌 Plano Diretor 2008</div>
+        <div>📌 Campo FEPESA 2025</div>
+        <div>📌 ANATEL 2025</div>
+        <div style="margin-top:8px;padding-top:8px;border-top:1px solid var(--borda);color:var(--texto-muito-suave);font-size:11.5px;">
+          Elaboração: FEPESA · 2025
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- CONTENT -->
+  <div class="content-area">
+    <div class="content-toolbar">
+      <div class="results-info" id="resultsInfo">Exibindo <strong>31</strong> mapas</div>
+      <div class="toolbar-right">
+        <select id="sortSelect" onchange="renderMaps()">
+          <option value="num">Ordenar por Nº</option>
+          <option value="nome">Ordenar A–Z</option>
+          <option value="tipo">Tipo (Validado primeiro)</option>
+          <option value="cat">Por Categoria</option>
+        </select>
+        <div class="view-toggle">
+          <button class="view-btn active" id="viewGrid" onclick="setView('grid')" title="Grade">⊞</button>
+          <button class="view-btn" id="viewList" onclick="setView('list')" title="Lista">☰</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="catInfoBanner" class="cat-info-banner"></div>
+    <div id="mapsContainer"></div>
+  </div>
+
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <div style="min-width:0">
+        <div class="modal-num" id="modalNum"></div>
+        <div class="modal-title" id="modalTitle"></div>
+      </div>
+      <div class="modal-header-btns">
+        <button class="modal-zoom-btn" onclick="openLightbox()" title="Ver em tela cheia">⛶</button>
+        <button class="modal-close" onclick="closeModalDirect()" title="Fechar">✕</button>
+      </div>
+    </div>
+    <div class="modal-body">
+      <div class="modal-map-wrap" onclick="openLightbox()">
+        <img class="modal-map-img" id="modalImg" src="" alt="">
+        <div class="modal-map-zoom-hint">🔍 Clique para ampliar</div>
+      </div>
+      <div class="modal-meta-section">
+        <div class="modal-desc" id="modalDesc"></div>
+        <div class="modal-meta-grid" id="modalMeta"></div>
+        <div class="modal-actions">
+          <button class="btn-modal btn-modal-secondary" onclick="downloadMap()">⬇ Baixar imagem</button>
+          <button class="btn-modal btn-modal-primary" onclick="window.open('https://drive.google.com/drive/folders/1x6kq65HtgPwwhSQ0WzyJvF1-RkFL5zuh','_blank')">📁 Acessar Drive</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox" onclick="closeLightboxIfBg(event)">
+  <div class="lightbox-bar" onclick="event.stopPropagation()">
+    <div class="lightbox-title" id="lightboxTitle"></div>
+    <div class="lightbox-actions">
+      <button class="lb-btn" onclick="downloadMap()">⬇ Baixar</button>
+      <button class="lb-close" onclick="closeLightbox()" title="Fechar">✕</button>
+    </div>
+  </div>
+  <button class="lb-nav lb-prev" onclick="event.stopPropagation(); navigateMap(-1)">‹</button>
+  <button class="lb-nav lb-next" onclick="event.stopPropagation(); navigateMap(1)">›</button>
+  <div class="lightbox-img-wrap" onclick="event.stopPropagation()">
+    <img id="lightboxImg" src="" alt="">
+  </div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+// ─── DATA ────────────────────────────────────────────────────────
+const CATEGORIAS = {
+  "Limites e Zoneamento": {
+    cor: "#2D6B52",
+    desc: "Apresentam a divisão territorial do município, incluindo limites municipais, bairros, perímetro urbano e zona rural, além do macrozoneamento e zoneamento definidos pelo Plano Diretor vigente. Elaborados com base em dados do IBGE 2024 e nas diretrizes do Plano Diretor Municipal, compatibilizando a delimitação territorial com a realidade administrativa local."
+  },
+  "Aspectos Físicos e Naturais": {
+    cor: "#4A7BA8",
+    desc: "Reúnem informações sobre as condições naturais do território: geologia, hidrografia, tipos de solo (pedologia), declividade, hipsometria, geomorfologia e cobertura vegetal. São instrumentos fundamentais para o planejamento ambiental e territorial, apoiando a definição de áreas adequadas para expansão urbana, preservação ambiental ou manejo sustentável dos recursos naturais."
+  },
+  "Terrenos de Marinha": {
+    cor: "#2A7E8C",
+    desc: "Apresentam a delimitação da Linha de Preamar Média (LPM) e da faixa correspondente ao Terreno de Marinha (LTM), conforme a legislação federal, com base nos marcos geodésicos da Secretaria do Patrimônio da União (SPU). Ferramenta essencial para o planejamento urbano costeiro, gestão fundiária e regularização de imóveis em áreas de domínio da União."
+  },
+  "Uso e Ocupação do Solo": {
+    cor: "#8B6914",
+    desc: "Apresenta a distribuição espacial das diferentes formas de aproveitamento do território: áreas agrícolas, residenciais, comerciais, industriais, vegetação nativa, restinga e infraestrutura pública. Fundamental para subsidiar políticas de ordenamento territorial, controle da expansão urbana e gestão dos recursos naturais."
+  },
+  "Aspectos Ambientais": {
+    cor: "#3D8A3A",
+    desc: "Apresentam a distribuição de variáveis fundamentais para o diagnóstico das condições ecológicas: APPs, áreas verdes, zonas de risco ambiental, atividades com potencial de impacto e áreas com potencial ambiental relevante. Orientam ações de fiscalização, licenciamento, conservação e planejamento territorial sustentável."
+  },
+  "Infraestrutura Urbana": {
+    cor: "#7A5C3A",
+    desc: "Representam a distribuição e cobertura dos principais sistemas técnicos presentes no município: redes de abastecimento de água, energia elétrica, esgotamento sanitário, comunicação e o sistema viário. Oferecem visão preliminar das condições de atendimento e acessibilidade aos serviços básicos essenciais à população, servindo de base para identificação de áreas com déficit."
+  },
+  "Equipamentos Públicos": {
+    cor: "#6A3A7A",
+    desc: "Contemplam a localização dos principais equipamentos públicos do município: unidades de administração pública, educação, saúde, assistência social e segurança. Permitem analisar a distribuição espacial dos serviços e identificar vazios de atendimento, sobreposições e demandas por reestruturação ou ampliação da rede de serviços públicos."
+  },
+  "Turismo": {
+    cor: "#A05C28",
+    desc: "Reúnem informações espaciais sobre atrativos naturais e culturais do município e a infraestrutura de apoio ao turismo: meios de hospedagem, equipamentos de lazer e pontos de informação turística. Subsídio técnico para o planejamento do turismo sustentável em Barra de São Miguel, contribuindo para a valorização do patrimônio e a definição de estratégias de promoção turística."
+  },
+};
+
+const MAPAS = [
+  { num:1,  nome:"Limites Municipais",               cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Define os limites do território de Barra de São Miguel com municípios vizinhos. É a base cartográfica fundamental para todo o planejamento territorial municipal, garantindo a precisão dos demais mapas e a compatibilidade com sistemas de informação geográfica oficiais." },
+  { num:2,  nome:"Limite dos Bairros",               cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:20.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Delimita os bairros do município a partir do cruzamento entre os dados do IBGE e o zoneamento do Plano Diretor vigente. Referência para gestão administrativa e planejamento local, devendo ser aprofundado e atualizado no processo de revisão do Plano Diretor." },
+  { num:3,  nome:"Perímetro Urbano",                 cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:65.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Distingue a área urbana da rural, definindo o limite de aplicação das normas urbanísticas e dos instrumentos do Plano Diretor. Fundamental para o controle da expansão urbana e a gestão do uso e ocupação do solo." },
+  { num:4,  nome:"Macrozoneamento Urbano",           cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:30.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Representa as grandes zonas de uso e ocupação do solo urbano conforme o Plano Diretor vigente. Elaborado a partir de arquivos CAD vetorizados e convertidos para Shapefile, integrando-os a sistemas de informação geográfica para maior precisão nas análises de planejamento." },
+  { num:5,  nome:"Zoneamento Urbano",                cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:30.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Detalha as zonas de uso e ocupação do solo urbano com parâmetros específicos para cada zona, como gabarito, taxa de ocupação e usos permitidos. Instrumento-chave para o licenciamento de edificações e o controle do crescimento urbano." },
+  { num:6,  nome:"Macrozoneamento Rural",            cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Delimita as macrozonas rurais do município, orientando o uso sustentável das áreas fora do perímetro urbano: áreas agrícolas, de preservação ambiental e de uso especial." },
+  { num:7,  nome:"Expansão Urbana 2004–2025",        cat:"Limites e Zoneamento",        tipo:"validado",    fonte:"IBGE 2024 / FEPESA",                  escala:"1:36.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Registra o crescimento e a evolução da mancha urbana ao longo de duas décadas, identificando os vetores de crescimento do município. Ferramenta essencial para compreender a dinâmica territorial e orientar políticas de contenção da expansão desordenada." },
+  { num:8,  nome:"Declividade",                      cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / MDE Topo 2024",           escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Classifica o terreno em faixas de inclinação percentual, distinguindo áreas planas, suavemente onduladas, onduladas e montanhosas. Essencial para identificar restrições construtivas, riscos de erosão e aptidão do solo para diferentes usos." },
+  { num:9,  nome:"Geologia",                         cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / SGB 2024",                escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Identifica as formações geológicas do município, como depósitos litorâneos e flúvio-lagunares. Base para análises de aptidão do solo, gestão de riscos naturais e planejamento de obras de infraestrutura." },
+  { num:10, nome:"Geomorfologia",                    cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / IBGE 2023",               escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Retrata as unidades de relevo predominantes: tabuleiros costeiros, planícies fluviais e planícies litorâneas. Fundamental para compreender a dinâmica territorial, os processos naturais e a vulnerabilidade do território." },
+  { num:11, nome:"Hipsometria",                      cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / MDE Topo 2024",           escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Indica as variações altimétricas do território, entre 0 e 104 metros. Permite identificar padrões de relevo e orientar o planejamento urbano, especialmente para drenagem, acessibilidade e risco de inundações." },
+  { num:12, nome:"Pedologia",                        cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / Embrapa",                 escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Detalha a distribuição dos tipos de solo: Gleissolos, Latossolos, Argissolos e Neossolos. Com aplicações para o planejamento agrícola, ambiental e construtivo, orientando o uso adequado de cada área do território." },
+  { num:13, nome:"Recursos Hídricos",                cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024",                           escala:"1:270.000", projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Mapeia a rede hidrográfica do município, incluindo rios, lagoas e corpos d'água. Referência para gestão ambiental, proteção de mananciais, delimitação de APPs e planejamento de infraestrutura de drenagem." },
+  { num:14, nome:"Cobertura Vegetal",                cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / Vegetação IBGE 2023",     escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Apresenta as diferentes tipologias de vegetação do município: formações pioneiras, remanescentes florestais, áreas agrícolas e zonas com influência urbana. Mapeado com base em imagens recentes, subsidia ações de conservação e controle ambiental." },
+  { num:15, nome:"Áreas de Proteção Ambiental",      cat:"Aspectos Físicos e Naturais", tipo:"validado",    fonte:"IBGE 2024 / IMA-AL / FEPESA 2025",    escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Identifica as Áreas de Preservação Permanente (APPs) e outras zonas de proteção ambiental, elaborado com base em critérios técnicos e marcos legais consolidados. Instrumento central para o controle do uso do solo em áreas sensíveis." },
+  { num:16, nome:"Limites dos Terrenos de Marinha",  cat:"Terrenos de Marinha",         tipo:"validado",    fonte:"SPU 2024",                            escala:"1:25.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Delimita a Linha de Preamar Média (LPM) e a faixa de Terreno de Marinha (LTM) conforme a SPU, tornando visível a sobreposição entre propriedades privadas, áreas de uso público e zonas sujeitas a regulação específica da União. Essencial para o licenciamento e a regularização fundiária costeira." },
+  { num:17, nome:"Uso e Ocupação da Terra",          cat:"Uso e Ocupação do Solo",      tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Mapeia as categorias de uso do solo: áreas residenciais, comerciais, industriais, agrícolas, vegetação nativa, restinga e infraestrutura pública. Compõe um panorama abrangente da configuração atual do território, fundamental para o ordenamento territorial e o controle da expansão urbana." },
+  { num:18, nome:"Áreas com Potencial Ambiental",    cat:"Aspectos Ambientais",         tipo:"situacional", fonte:"IBGE 2024",                           escala:"1:70.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Identifica áreas com características naturais relevantes para conservação, recuperação ambiental ou provisão de serviços ecossistêmicos. Subsidiará ações de proteção e planejamento territorial sustentável, com aprofundamento nas próximas etapas do diagnóstico." },
+  { num:19, nome:"Áreas Verdes, Praças e Mirante",   cat:"Aspectos Ambientais",         tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:26.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Localiza os espaços públicos de lazer, áreas verdes e mirantes do município. Contribui para análises de qualidade de vida urbana e planejamento de espaços públicos, identificando áreas com maior oferta e deficiências de infraestrutura de lazer." },
+  { num:20, nome:"Áreas de Risco",                   cat:"Aspectos Ambientais",         tipo:"situacional", fonte:"IBGE 2024 / SGB 2024 / Campo FEPESA", escala:"1:18.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Identifica zonas com susceptibilidade a eventos naturais como inundações, deslizamentos e erosão costeira. Base para ações de prevenção e gestão de riscos, orientando políticas habitacionais e de proteção civil. Mapa situacional, em fase de validação técnica complementar." },
+  { num:21, nome:"Atividades Causadoras de Impacto", cat:"Aspectos Ambientais",         tipo:"situacional", fonte:"IBGE 2024 / SGB 2024 / Campo FEPESA", escala:"1:38.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Mapeia atividades com potencial de impacto ambiental sobre o território: empreendimentos, fontes de poluição e usos conflitantes. Subsidia o licenciamento ambiental e a gestão das pressões sobre os recursos naturais do município." },
+  { num:22, nome:"Rede Viária",                      cat:"Infraestrutura Urbana",       tipo:"situacional", fonte:"IBGE 2024 / Lei PD 2008",             escala:"1:15.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Representa o sistema viário municipal, incluindo rodovias, vias urbanas e caminhos rurais. Base para análises de mobilidade, acessibilidade e planejamento de infraestrutura de transporte. Essencial para identificar gargalos e priorizar investimentos." },
+  { num:23, nome:"Carência de Iluminação Pública",   cat:"Infraestrutura Urbana",       tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:20.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Identifica áreas com déficit de iluminação pública, apoiando ações de ampliação e qualificação do serviço nas regiões com maior carência. Contribui para políticas de segurança pública e qualidade de vida urbana." },
+  { num:24, nome:"Esgotamento Sanitário",            cat:"Infraestrutura Urbana",       tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:35.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Apresenta a cobertura preliminar da rede de esgotamento sanitário, identificando áreas atendidas e com déficit. Os dados referentes à rede linear dependem de levantamento técnico de campo para representação completa e conclusiva." },
+  { num:25, nome:"Abastecimento de Água",            cat:"Infraestrutura Urbana",       tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:35.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Apresenta a cobertura preliminar da rede de abastecimento de água, identificando áreas atendidas e não atendidas. Dados sujeitos a complementação e validação com o órgão responsável pelo serviço." },
+  { num:26, nome:"Resíduos Sólidos e Limpeza Pública", cat:"Infraestrutura Urbana",    tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:30.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Mapeia a cobertura dos serviços de coleta de resíduos sólidos e limpeza pública, identificando áreas com déficit de atendimento e pontos críticos de destinação irregular de resíduos." },
+  { num:27, nome:"Telefonia Móvel",                  cat:"Infraestrutura Urbana",       tipo:"situacional", fonte:"IBGE 2024 / ANATEL 2025",             escala:"1:18.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Apresenta a cobertura das redes de telefonia móvel no município, com base nos dados da ANATEL 2025. Identifica áreas com sinal e zonas sem cobertura, subsidiando o planejamento de telecomunicações e serviços digitais." },
+  { num:28, nome:"Equipamentos Públicos",            cat:"Equipamentos Públicos",       tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:40.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Localiza os principais equipamentos públicos municipais: unidades de saúde, escolas, centros de assistência social, órgãos de administração e segurança pública. Permite analisar a distribuição dos serviços e identificar vazios de atendimento no território." },
+  { num:29, nome:"Infraestrutura Turística",         cat:"Turismo",                     tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:35.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Mapeia a infraestrutura de apoio ao turismo: meios de hospedagem, restaurantes, equipamentos de lazer e pontos de informação turística. Base para identificar gaps na cadeia de serviços e orientar investimentos na qualificação da recepção de visitantes." },
+  { num:30, nome:"Atrativos Turísticos",             cat:"Turismo",                     tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:40.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Localiza os principais atrativos turísticos do município — praias, lagoas, áreas de lazer e pontos de interesse cultural — articulando patrimônio e serviços para subsidiar o planejamento do turismo sustentável." },
+  { num:31, nome:"Atrativos Naturais e Culturais",   cat:"Turismo",                     tipo:"situacional", fonte:"IBGE 2024 / Campo FEPESA 2025",        escala:"1:26.000",  projecao:"UTM SIRGAS 2000 fuso 25S",
+    desc:"Apresenta os atrativos naturais e culturais de Barra de São Miguel em maior detalhe: praias, lagoas, patrimônio histórico e manifestações culturais. Base para estratégias de promoção turística e valorização da identidade local." },
+];
+
+// ─── STATE ───────────────────────────────────────────────────────
+let activeCategoria = "todas";
+let activeTipo = "todos";
+let searchQuery = "";
+let viewMode = "grid";
+let currentMapNum = null;
+
+// ─── INIT ────────────────────────────────────────────────────────
+function init() {
+  buildCategoriasFilter();
+  renderMaps();
+  document.getElementById('searchInput').addEventListener('input', e => {
+    searchQuery = e.target.value.toLowerCase().trim();
+    renderMaps();
+    // Scroll to results on any screen size
+    if (searchQuery.length > 0) {
+      setTimeout(() => {
+        document.querySelector('.content-area')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 80);
+    }
+  });
+}
+
+function buildCategoriasFilter() {
+  const container = document.getElementById('categoriasFilter');
+  let html = `<button class="filter-btn active" id="cat-todas" onclick="filterCategoria('todas')">
+    <span class="filter-dot" style="background:#aaa"></span>
+    Todas
+    <span class="filter-count">${MAPAS.length}</span>
+  </button>`;
+
+  Object.entries(CATEGORIAS).forEach(([cat, def]) => {
+    const count = MAPAS.filter(m => m.cat === cat).length;
+    const id = 'cat-' + cat.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+    html += `<button class="filter-btn" id="${id}" onclick="filterCategoria('${cat.replace(/'/g,"\\'")}')">
+      <span class="filter-dot" style="background:${def.cor}"></span>
+      ${cat}
+      <span class="filter-count">${count}</span>
+    </button>`;
+  });
+  container.innerHTML = html;
+}
+
+// ─── FILTERS ─────────────────────────────────────────────────────
+function filterCategoria(cat) {
+  activeCategoria = cat;
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  const id = cat === 'todas' ? 'cat-todas' : 'cat-' + cat.replace(/\s+/g,'_').replace(/[^a-zA-Z0-9_]/g,'');
+  const el = document.getElementById(id);
+  if (el) el.classList.add('active');
+
+  // Show/hide category info banner
+  const banner = document.getElementById('catInfoBanner');
+  if (cat !== 'todas' && CATEGORIAS[cat]) {
+    const def = CATEGORIAS[cat];
+    banner.innerHTML = `<strong style="color:var(--verde-principal)">${cat}</strong>${def.desc}`;
+    banner.style.borderLeftColor = def.cor;
+    banner.classList.add('visible');
+  } else {
+    banner.classList.remove('visible');
+  }
+
+  renderMaps();
+
+  // Scroll to content on all screen sizes
+  setTimeout(() => {
+    document.querySelector('.content-area')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 80);
+}
+
+function filterTipo(tipo) {
+  activeTipo = tipo;
+  document.querySelectorAll('.tipo-btn').forEach(b => b.classList.remove('active'));
+  const map = { todos: 0, validado: 1, situacional: 2 };
+  document.querySelectorAll('.tipo-btn')[map[tipo]].classList.add('active');
+  renderMaps();
+  if (window.innerWidth <= 900) {
+    setTimeout(() => {
+      document.querySelector('.content-area')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 80);
+  }
+}
+
+function setView(v) {
+  viewMode = v;
+  document.getElementById('viewGrid').classList.toggle('active', v === 'grid');
+  document.getElementById('viewList').classList.toggle('active', v === 'list');
+  renderMaps();
+}
+
+// ─── DATA PIPELINE ───────────────────────────────────────────────
+function getFiltered() {
+  let list = [...MAPAS];
+  if (activeTipo !== 'todos') list = list.filter(m => m.tipo === activeTipo);
+  if (activeCategoria !== 'todas') list = list.filter(m => m.cat === activeCategoria);
+  if (searchQuery) list = list.filter(m =>
+    m.nome.toLowerCase().includes(searchQuery) ||
+    m.cat.toLowerCase().includes(searchQuery) ||
+    m.fonte.toLowerCase().includes(searchQuery) ||
+    m.desc.toLowerCase().includes(searchQuery) ||
+    String(m.num).includes(searchQuery)
+  );
+
+  const sort = document.getElementById('sortSelect').value;
+  if (sort === 'num')  list.sort((a,b) => a.num - b.num);
+  if (sort === 'nome') list.sort((a,b) => a.nome.localeCompare(b.nome, 'pt'));
+  if (sort === 'tipo') list.sort((a,b) => a.tipo.localeCompare(b.tipo) || a.num - b.num);
+  if (sort === 'cat')  list.sort((a,b) => a.cat.localeCompare(b.cat, 'pt') || a.num - b.num);
+  return list;
+}
+
+// ─── RENDER ──────────────────────────────────────────────────────
+function renderMaps() {
+  const filtered = getFiltered();
+  const container = document.getElementById('mapsContainer');
+  document.getElementById('resultsInfo').innerHTML =
+    `Exibindo <strong>${filtered.length}</strong> mapa${filtered.length !== 1 ? 's' : ''}`;
+
+  if (!filtered.length) {
+    container.innerHTML = `<div class="empty-state">
+      <div class="empty-icon">🗺️</div>
+      <h3>Nenhum mapa encontrado</h3>
+      <p>Ajuste os filtros ou a busca.</p>
+    </div>`;
+    return;
+  }
+
+  viewMode === 'grid' ? renderGrid(filtered, container) : renderList(filtered, container);
+}
+
+function renderGrid(filtered, container) {
+  const byCat = document.getElementById('sortSelect').value === 'cat' && activeCategoria === 'todas';
+  if (byCat) {
+    const cats = [...new Set(filtered.map(m => m.cat))];
+    container.innerHTML = cats.map(cat => {
+      const items = filtered.filter(m => m.cat === cat);
+      const def = CATEGORIAS[cat] || { cor: '#888' };
+      return `<div class="categoria-header">
+        <span class="cat-dot" style="background:${def.cor}"></span>
+        <span class="cat-titulo">${cat}</span>
+        <span class="cat-line"></span>
+        <span class="cat-count-badge">${items.length} mapa${items.length > 1 ? 's' : ''}</span>
+      </div>
+      <div class="maps-grid">${items.map((m,i) => buildCard(m,i)).join('')}</div>`;
+    }).join('');
+  } else {
+    container.innerHTML = `<div class="maps-grid">${filtered.map((m,i) => buildCard(m,i)).join('')}</div>`;
+  }
+}
+
+function renderList(filtered, container) {
+  container.innerHTML = `<div class="maps-list">${filtered.map((m,i) => buildCardList(m,i)).join('')}</div>`;
+}
+
+function imgSrc(num) {
+  return `mapas/mapa_${String(num).padStart(2,'0')}.jpg`;
+}
+
+function buildCard(m, i) {
+  const delay = Math.min(i * 25, 400);
+  return `<div class="map-card" onclick="cardClick(${m.num})" style="animation-delay:${delay}ms">
+    <div class="card-thumb">
+      <img src="${imgSrc(m.num)}" alt="Mapa ${m.num} - ${m.nome}" loading="lazy">
+      <div class="card-num">Mapa ${String(m.num).padStart(2,'0')}</div>
+      <div class="card-tipo-badge ${m.tipo === 'validado' ? 'badge-validado' : 'badge-situacional'}">
+        ${m.tipo === 'validado' ? '✓ Validado' : '⏳ Situacional'}
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="card-categoria">${m.cat}</div>
+      <div class="card-title">${m.nome}</div>
+      <div class="card-desc-preview" style="font-size:11.5px;color:var(--texto-muito-suave);line-height:1.5;margin-top:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">${m.desc}</div>
+      <div class="card-footer">
+        <span class="card-source">${m.escala}</span>
+        <div class="card-actions">
+          <button class="icon-btn" title="Ver mapa em tela cheia" onclick="event.stopPropagation();openModalThenLightbox(${m.num})">🔍</button>
+          <button class="icon-btn" title="Baixar" onclick="event.stopPropagation();downloadImgDirect(${m.num})">⬇</button>
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+
+function buildCardList(m, i) {
+  const delay = Math.min(i * 20, 400);
+  return `<div class="map-card-list" onclick="openModal(${m.num})" style="animation-delay:${delay}ms">
+    <div class="list-thumb">
+      <img src="${imgSrc(m.num)}" alt="Mapa ${m.num}" loading="lazy">
+    </div>
+    <div class="list-num">${String(m.num).padStart(2,'0')}</div>
+    <div class="list-info">
+      <div class="list-cat">${m.cat}</div>
+      <div class="list-title">${m.nome}</div>
+      <div class="list-meta">${m.fonte} · ${m.escala}</div>
+    </div>
+    <div class="list-badge ${m.tipo === 'validado' ? 'badge-validado' : 'badge-situacional'}">
+      ${m.tipo === 'validado' ? '✓ Validado' : '⏳ Situacional'}
+    </div>
+  </div>`;
+}
+
+// ─── MODAL ───────────────────────────────────────────────────────
+// Mobile: go straight to lightbox; desktop: open modal first
+function cardClick(num) {
+  if (window.innerWidth <= 900) {
+    openModal(num);
+    setTimeout(() => openLightbox(), 60);
+  } else {
+    openModal(num);
+  }
+}
+
+function openModal(num) {
+  const m = MAPAS.find(x => x.num === num);
+  if (!m) return;
+  currentMapNum = num;
+
+  document.getElementById('modalNum').textContent = `Mapa ${String(num).padStart(2,'0')} · ${m.cat}`;
+  document.getElementById('modalTitle').textContent = m.nome;
+  document.getElementById('modalDesc').textContent = m.desc;
+
+  const img = document.getElementById('modalImg');
+  img.src = imgSrc(num);
+  img.alt = m.nome;
+
+  document.getElementById('modalMeta').innerHTML = `
+    <div class="meta-item">
+      <div class="meta-label">Tipo</div>
+      <div class="meta-value" style="display:flex;align-items:center;gap:6px">
+        <span style="width:8px;height:8px;border-radius:50%;background:${m.tipo==='validado'?'#2D6B52':'#8B6914'};flex-shrink:0;display:inline-block"></span>
+        ${m.tipo === 'validado' ? 'Bloco I — Validado' : 'Bloco II — Situacional'}
+      </div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Escala</div>
+      <div class="meta-value">${m.escala}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Projeção</div>
+      <div class="meta-value">${m.projecao}</div>
+    </div>
+    <div class="meta-item">
+      <div class="meta-label">Elaboração</div>
+      <div class="meta-value">FEPESA · 2025</div>
+    </div>
+    <div class="meta-item" style="grid-column:1/-1">
+      <div class="meta-label">Fontes de Dados</div>
+      <div class="meta-value">${m.fonte}</div>
+    </div>
+  `;
+
+  document.getElementById('modalOverlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function openModalThenLightbox(num) {
+  openModal(num);
+  setTimeout(() => openLightbox(), 50);
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('modalOverlay')) closeModalDirect();
+}
+
+function closeModalDirect() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentMapNum = null;
+}
+
+// ─── LIGHTBOX ─────────────────────────────────────────────────────
+function openLightbox() {
+  if (!currentMapNum) return;
+  const m = MAPAS.find(x => x.num === currentMapNum);
+  const lb = document.getElementById('lightbox');
+  const lbImg = document.getElementById('lightboxImg');
+  const lbTitle = document.getElementById('lightboxTitle');
+
+  lbImg.src = imgSrc(currentMapNum);
+  lbImg.alt = m.nome;
+  lbTitle.textContent = `Mapa ${String(currentMapNum).padStart(2,'0')} — ${m.nome}`;
+
+  lb.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeLightbox() {
+  document.getElementById('lightbox').classList.remove('open');
+}
+
+function closeLightboxIfBg(e) {
+  if (e.target === document.getElementById('lightbox')) closeLightbox();
+}
+
+function navigateMap(dir) {
+  const filtered = getFiltered();
+  const idx = filtered.findIndex(m => m.num === currentMapNum);
+  const next = filtered[idx + dir];
+  if (next) {
+    currentMapNum = next.num;
+    openModal(next.num);
+    openLightbox();
+  }
+}
+
+function downloadMap() {
+  if (!currentMapNum) return;
+  downloadImgDirect(currentMapNum);
+}
+
+function downloadImgDirect(num) {
+  const m = MAPAS.find(x => x.num === num);
+  const a = document.createElement('a');
+  a.href = imgSrc(num);
+  a.download = `PlanUrbi_Mapa${String(num).padStart(2,'0')}_${(m?.nome||'').replace(/\s+/g,'_')}.jpg`;
+  a.click();
+  showToast('⬇ Download iniciado');
+}
+
+// Keyboard navigation
+document.addEventListener('keydown', e => {
+  const lbOpen = document.getElementById('lightbox').classList.contains('open');
+  if (e.key === 'Escape') {
+    if (lbOpen) closeLightbox();
+    else closeModalDirect();
+  }
+  if (e.key === 'ArrowRight' && currentMapNum) navigateMap(1);
+  if (e.key === 'ArrowLeft' && currentMapNum) navigateMap(-1);
+  if (e.key === 'Enter' && currentMapNum && !lbOpen) openLightbox();
+});
+
+// ─── TOAST ───────────────────────────────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+init();
+</script>
+
+<!-- FOOTER INSTITUCIONAL -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+
+      <!-- COLUNA 1: MARCA -->
+      <div>
+        <div class="footer-logo-big">PlanUrbi</div>
+        <div class="footer-tagline">Planejamento territorial inteligente para Barra de São Miguel, Alagoas.</div>
+        <div class="footer-version">v4.0 · Produto 02 · Fev/2025</div>
+      </div>
+
+      <!-- COLUNA 2: EQUIPE -->
+      <div>
+        <div class="footer-col-title">Equipe de Coordenação</div>
+        <div class="team-list">
+          <div class="team-member">
+            <div class="team-name">Ricardo Antônio de Barros Wanderley</div>
+            <div class="team-role">Coordenação Executiva</div>
+          </div>
+          <div class="team-member">
+            <div class="team-name">Dra. Melissa Mota Alcides</div>
+            <div class="team-role">Coordenação de Urbanismo</div>
+          </div>
+          <div class="team-member">
+            <div class="team-name">Dra. Raquel Cabral</div>
+            <div class="team-role">Coordenação de Tecnologia</div>
+          </div>
+          <div class="team-member">
+            <div class="team-name">Ms. Rute Ferreira Barbosa</div>
+            <div class="team-role">Coordenação de Geoprocessamento</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLUNA 3: CONTATO -->
+      <div>
+        <div class="footer-col-title">Contato e Links</div>
+        <div class="contact-list">
+          <a class="contact-item" href="mailto:projeto@planurbi.com.br">
+            <div class="contact-icon">✉️</div>
+            projeto@planurbi.com.br
+          </a>
+          <a class="contact-item" href="https://www.planurbi.com.br" target="_blank">
+            <div class="contact-icon">🌐</div>
+            www.planurbi.com.br
+          </a>
+          <a class="contact-item" href="https://instagram.com/planurbi_" target="_blank">
+            <div class="contact-icon">📸</div>
+            @planurbi_
+          </a>
+          <a class="contact-item" href="https://drive.google.com/drive/folders/1x6kq65HtgPwwhSQ0WzyJvF1-RkFL5zuh" target="_blank">
+            <div class="contact-icon">📁</div>
+            Repositório de Dados
+          </a>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <div class="footer-copyright">
+        © 2026 PlanUrbi — Departamento de Desenvolvimento de Soluções Tecnológicas<br>
+        Todos os direitos reservados · FEPESA · Barra de São Miguel / AL
+      </div>
+      <div class="footer-disclaimer">
+        Este painel é instrumento de visualização e comunicação.<br>
+        Fonte oficial: GeoPackage + Projeto QGIS + Mapas em PDF.
+      </div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
