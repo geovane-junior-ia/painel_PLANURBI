@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>PlanUrbi · Painel Executivo</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 :root {
@@ -19,13 +19,13 @@
   --sombra2:0 6px 32px rgba(15,51,40,0.13);
 }
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto);min-height:100vh;}
+body{font-family:'Plus Jakarta Sans',sans-serif;background:var(--areia);color:var(--texto);min-height:100vh;}
 
 /* HEADER */
 .hdr{background:var(--verde-escuro);height:64px;padding:0 40px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:50;}
-.hdr-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;display:flex;align-items:center;gap:12px;}
+.hdr-logo{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:#fff;display:flex;align-items:center;gap:12px;}
 .hdr-logo span{font-size:11px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);border-left:1px solid rgba(255,255,255,0.15);padding-left:12px;}
-.btn-back{font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:7px 16px;border-radius:7px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
+.btn-back{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:500;color:rgba(255,255,255,0.7);background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);padding:7px 16px;border-radius:7px;cursor:pointer;transition:all .15s;display:flex;align-items:center;gap:6px;}
 .btn-back:hover{background:rgba(255,255,255,0.14);color:#fff;}
 
 /* HERO */
@@ -33,26 +33,26 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 .hero::before{content:'';position:absolute;right:-60px;top:-60px;width:280px;height:280px;background:radial-gradient(circle,rgba(255,255,255,0.06) 0%,transparent 70%);border-radius:50%;}
 .hero-in{max-width:1300px;margin:0 auto;position:relative;z-index:1;}
 .hero-tag{font-size:11px;font-weight:600;letter-spacing:2px;text-transform:uppercase;color:rgba(255,255,255,0.5);margin-bottom:10px;}
-.hero-h1{font-family:'Syne',sans-serif;font-size:clamp(22px,3vw,38px);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.5px;margin-bottom:10px;}
+.hero-h1{font-family:'Plus Jakarta Sans',sans-serif;font-size:clamp(22px,3vw,38px);font-weight:800;color:#fff;line-height:1.1;letter-spacing:-0.5px;margin-bottom:10px;}
 .hero-sub{font-size:15px;color:rgba(255,255,255,0.65);font-weight:300;max-width:580px;line-height:1.65;margin-bottom:32px;}
 .kpi-strip{display:flex;gap:0;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.12);border-radius:14px;overflow:hidden;max-width:800px;}
 .kpi-item{flex:1;padding:18px 16px;border-right:1px solid rgba(255,255,255,0.1);transition:background .2s;}
 .kpi-item:last-child{border-right:none;}
 .kpi-item:hover{background:rgba(255,255,255,0.06);}
 .kpi-icon{font-size:20px;margin-bottom:8px;}
-.kpi-v{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px;}
+.kpi-v{font-family:'Plus Jakarta Sans',sans-serif;font-size:30px;font-weight:800;color:#fff;line-height:1;margin-bottom:4px;}
 .kpi-l{font-size:11.5px;font-weight:500;color:rgba(255,255,255,0.5);line-height:1.4;}
 
 /* MAIN */
 .main{max-width:1300px;margin:0 auto;padding:36px 40px 60px;display:flex;flex-direction:column;gap:28px;}
 
 /* SECTION TITLE */
-.stitle{font-family:'Syne',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--verde-medio);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
+.stitle{font-family:'Plus Jakarta Sans',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;color:var(--verde-medio);margin-bottom:16px;display:flex;align-items:center;gap:10px;}
 .stitle::after{content:'';flex:1;height:1px;background:var(--borda);}
 
 /* CARD */
 .card{background:var(--branco);border:1px solid var(--borda);border-radius:16px;padding:24px;box-shadow:var(--sombra);}
-.ctitle{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;color:var(--texto);margin-bottom:4px;}
+.ctitle{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;color:var(--texto);margin-bottom:4px;}
 .csub{font-size:13px;color:var(--texto-suave);font-weight:300;margin-bottom:20px;line-height:1.55;}
 
 /* GRIDS */
@@ -67,10 +67,10 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 .b-icon{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:22px;margin-bottom:14px;}
 .bv .b-icon{background:rgba(45,107,82,0.15);}
 .bs .b-icon{background:rgba(139,105,20,0.15);}
-.b-num{font-family:'Syne',sans-serif;font-size:56px;font-weight:800;line-height:1;margin-bottom:6px;}
+.b-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:56px;font-weight:800;line-height:1;margin-bottom:6px;}
 .bv .b-num{color:var(--validado);}
 .bs .b-num{color:var(--situacional);}
-.b-title{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
+.b-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;margin-bottom:8px;}
 .bv .b-title{color:var(--verde-principal);}
 .bs .b-title{color:#6B4E00;}
 .b-desc{font-size:13.5px;line-height:1.65;font-weight:300;}
@@ -89,15 +89,15 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 .leg-info{flex:1;}
 .leg-name{font-weight:600;font-size:14px;color:var(--texto);margin-bottom:3px;}
 .leg-exp{font-size:12.5px;color:var(--texto-suave);font-weight:300;line-height:1.5;}
-.leg-num{font-family:'Syne',sans-serif;font-size:30px;font-weight:800;flex-shrink:0;}
+.leg-num{font-family:'Plus Jakarta Sans',sans-serif;font-size:30px;font-weight:800;flex-shrink:0;}
 
 /* CAT CARDS */
 .ccard{background:var(--branco);border:1px solid var(--borda);border-radius:14px;padding:18px;box-shadow:var(--sombra);display:flex;flex-direction:column;gap:8px;transition:all .2s;}
 .ccard:hover{box-shadow:var(--sombra2);transform:translateY(-2px);}
 .cc-header{display:flex;align-items:center;gap:10px;}
 .cc-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0;}
-.cc-name{font-family:'Syne',sans-serif;font-size:13px;font-weight:700;color:var(--texto);line-height:1.3;}
-.cc-num{margin-left:auto;font-family:'Syne',sans-serif;font-size:22px;font-weight:800;flex-shrink:0;}
+.cc-name{font-family:'Plus Jakarta Sans',sans-serif;font-size:13px;font-weight:700;color:var(--texto);line-height:1.3;}
+.cc-num{margin-left:auto;font-family:'Plus Jakarta Sans',sans-serif;font-size:22px;font-weight:800;flex-shrink:0;}
 .cc-desc{font-size:12.5px;color:var(--texto-suave);line-height:1.55;font-weight:300;}
 .cc-list{font-size:11.5px;color:var(--texto-fraco);font-style:italic;border-top:1px solid var(--borda);padding-top:8px;line-height:1.6;}
 
@@ -106,7 +106,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 .pi-header{display:flex;align-items:baseline;justify-content:space-between;gap:8px;margin-bottom:6px;}
 .pi-name{font-size:14px;font-weight:500;color:var(--texto);}
 .pi-right{display:flex;align-items:center;gap:8px;flex-shrink:0;}
-.pi-pct{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;}
+.pi-pct{font-family:'Plus Jakarta Sans',sans-serif;font-size:16px;font-weight:700;}
 .pi-status{font-size:11px;font-weight:600;padding:3px 9px;border-radius:10px;}
 .pi-track{height:9px;background:var(--areia-escura);border-radius:5px;overflow:hidden;}
 .pi-fill{height:100%;border-radius:5px;transition:width 1.2s cubic-bezier(.4,0,.2,1);}
@@ -121,7 +121,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 .tl-line{width:2px;flex:1;background:var(--borda);margin-top:6px;border-radius:1px;}
 .tl-item:last-child .tl-line{display:none;}
 .tl-date{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--texto-fraco);margin-bottom:5px;}
-.tl-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;color:var(--texto);margin-bottom:5px;}
+.tl-title{font-family:'Plus Jakarta Sans',sans-serif;font-size:15px;font-weight:700;color:var(--texto);margin-bottom:5px;}
 .tl-desc{font-size:13px;color:var(--texto-suave);line-height:1.6;font-weight:300;}
 .tl-tag{display:inline-block;margin-top:8px;font-size:11.5px;font-weight:600;padding:4px 10px;border-radius:10px;}
 
@@ -139,7 +139,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 
 /* FOOTER */
 .footer{background:var(--verde-escuro);padding:22px 40px;display:flex;align-items:center;justify-content:space-between;gap:20px;flex-wrap:wrap;}
-.footer-logo{font-family:'Syne',sans-serif;font-size:20px;font-weight:800;color:#fff;}
+.footer-logo{font-family:'Plus Jakarta Sans',sans-serif;font-size:20px;font-weight:800;color:#fff;}
 .footer-disc{font-size:12px;color:rgba(255,255,255,0.35);max-width:500px;line-height:1.6;text-align:center;}
 .footer-meta{font-size:12px;color:rgba(255,255,255,0.35);text-align:right;line-height:1.7;}
 
@@ -155,8 +155,9 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 <body>
 
 <div class="hdr">
-  <a href="index.html" style="text-decoration:none">
-    <div class="hdr-logo">PlanUrbi <span>Painel Executivo</span></div>
+  <a href="index.html" style="text-decoration:none;display:flex;align-items:center;gap:12px;">
+    <img src="logo.png" alt="PlanUrbi" style="height:36px;width:auto;display:block;">
+    <span style="font-size:11px;font-weight:400;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,0.4);border-left:1px solid rgba(255,255,255,0.15);padding-left:12px;">Painel Executivo</span>
   </a>
   <button class="btn-back" onclick="window.location.href='index.html'">← Ver todos os mapas</button>
 </div>
@@ -389,7 +390,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 
       <!-- MARCA -->
       <div>
-        <div style="font-family:'Syne',sans-serif;font-size:26px;font-weight:800;color:#fff;letter-spacing:-0.5px;margin-bottom:10px;">PlanUrbi</div>
+        <img src="logo.png" alt="PlanUrbi" style="height:40px;width:auto;display:block;margin-bottom:10px;">
         <div style="font-size:13px;color:rgba(255,255,255,0.4);font-weight:300;line-height:1.6;max-width:220px;margin-bottom:18px;">Planejamento territorial inteligente para Barra de São Miguel, Alagoas.</div>
         <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,0.07);border:1px solid rgba(255,255,255,0.1);border-radius:6px;padding:4px 10px;font-size:11px;font-weight:600;color:rgba(255,255,255,0.4);letter-spacing:.5px;">v4.0 · Produto 02 · Fev/2025</div>
       </div>
@@ -440,7 +441,7 @@ body{font-family:'DM Sans',sans-serif;background:var(--areia);color:var(--texto)
 </div>
 
 <script>
-Chart.defaults.font.family="'DM Sans',sans-serif";
+Chart.defaults.font.family="'Plus Jakarta Sans',sans-serif";
 Chart.defaults.color='#5A5A52';
 
 new Chart(document.getElementById('chartDonut'),{
